@@ -71,7 +71,7 @@ export default function Orders({ rows, title }: IProps) {
           {rows.map((row) => {
             const { customer, timestamp, basket, orderRef } = row;
             const dateObject = new Date(timestamp);
-            const name = `${customer.firstName} ${customer.surname}`;
+            const name = `${customer.firstname} ${customer.surname}`;
             const address = `${customer.address1}, ${customer.address2}, ${customer.city}, ${customer.state}, ${customer.zipCode}`;
             return (
               <TableRow key={orderRef} onClick={() => handleOrderClick(row)}>
@@ -109,7 +109,7 @@ export default function Orders({ rows, title }: IProps) {
             <>
               <Typography>{`Order Ref: ${selectedOrder.orderRef}`}</Typography>
               <Typography>{`Basket Total: ${selectedOrder.basket.total}`}</Typography>
-              {selectedOrder.basket.items.map((item) => {
+              {selectedOrder.basket.items.map((item: { quantity: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; title: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }) => {
                 return (
                   <Typography>
                     <div>{item.quantity}x</div>

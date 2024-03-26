@@ -11,6 +11,7 @@ COPY package*.json ./
 RUN npm install --legacy-peer-deps
 
 ENV REACT_APP_GATEWAY_URL=""
+ENV REACT_APP_AUTH_URL=""
 ENV PORT=4100
 
 # Copy the rest of the application code to the working directory

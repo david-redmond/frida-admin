@@ -9,16 +9,16 @@ import Box from "@mui/material/Box";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
-import http from "../../http";
+import { httpAuth } from "../../http";
 import Copyright from "../../components/Copyright";
 
 async function registerNewUser(credentials: any) {
-  const response = await http.post("/auth/register", credentials);
+  const response = await httpAuth.post("/register", credentials);
   return response;
 }
 
 async function loginUser(credentials: any) {
-  const response = await http.post("/auth/login", credentials);
+  const response = await httpAuth.post("/login", credentials);
   return response.data;
 }
 
@@ -29,7 +29,7 @@ export default function SignUp(props: any) {
     const payload = {
       email: data.get("email"),
       password: data.get("password"),
-      firstName: data.get("firstName"),
+      firstname: data.get("firstname"),
       surname: data.get("surname"),
     };
     try {
@@ -68,10 +68,10 @@ export default function SignUp(props: any) {
             <Grid item xs={12} sm={6}>
               <TextField
                 autoComplete="given-name"
-                name="firstName"
+                name="firstname"
                 required
                 fullWidth
-                id="firstName"
+                id="firstname"
                 label="First Name"
                 autoFocus
               />

@@ -2,7 +2,7 @@
 import { IStepsTypes } from "../../../src/modules/cms/interface";
 import { IThemeColors, IThemeLogo } from "../../../src/modules/theme/interface";
 import { IProduct } from "../../../src/modules/products/interface";
-import { IOrder } from "../../../src/modules/orders/interface";
+import { IOrder } from '../../../src/modules/orders/interface';
 
 export interface UserState {
   isLoggedIn: boolean;
@@ -12,7 +12,7 @@ export interface UserState {
 
 export interface IUser {
   id: string;
-  firstName: string;
+  firstname: string;
   surname: string;
   email: string;
   position: string;

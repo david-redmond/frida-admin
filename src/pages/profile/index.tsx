@@ -98,7 +98,7 @@ const ProfilePage: React.FC<any> = ({ associatedCompanies, user }: IProps) => {
                     sx={{ width: 150, height: 150, margin: "auto" }}
                   />
                   <Typography variant="h5" mt={2}>
-                    {!!user ? `${user.firstName} ${user.surname}` : "Guest"}
+                    {!!user ? `${user.firstname} ${user.surname}` : "Guest"}
                   </Typography>
                   <Typography variant="subtitle1" color="textSecondary">
                     {!!user ? user.position : " "}

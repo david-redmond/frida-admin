@@ -11,7 +11,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
-import http from "../../http";
+import { httpAuth } from "../../http";
 import Copyright from "../../components/Copyright";
 
 interface ICredentials {
@@ -20,7 +20,7 @@ interface ICredentials {
 }
 
 async function loginUser(credentials: ICredentials) {
-  const response = await http.post("/auth/login", credentials);
+  const response = await httpAuth.post("/login", credentials);
   return response.data;
 }
 export default function SignInSide(props: any) {
