@@ -1,0 +1,35 @@
+.page-main {
+  background: #d5d2d2ff;
+  width: 100%;
+}
+
+.page-main-header {
+  background: #ffffff;
+  border-bottom: 4px solid #61dafb;
+  display: flex;
+  align-items: self-end;
+  padding: 32px;
+  font-size: 32px;
+  font-weight: bold;
+}
+
+.page-main-header button {
+  padding: 8px 16px;
+  margin-left: auto;
+  margin-right: 0;
+  background: #61dafb;
+  color: black;
+  border: none;
+  border-radius: 4px;
+  font-weight: bold;
+  font-size: 16px;
+  cursor: pointer;
+}
+
+.page-main-header button:hover {
+  background: #1ba5cb;
+}
+
+.page-main-body {
+  padding: 12px 24px;
+}
