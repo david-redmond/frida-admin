@@ -3,10 +3,11 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "start": "cross-env node scripts/start.js",
-    "dev": "cross-env REACT_APP_IS_DEV=true node scripts/start.js",
-    "build": "node scripts/build.js",
-    "test": "node scripts/testrunner.js"
+    "start": "cross-env node src/scripts/start.js",
+    "dev": "cross-env REACT_APP_IS_DEV=true node src/scripts/start.js",
+    "build": "node src/scripts/build.js",
+    "lint": "eslint",
+    "test": "node src/scripts/testrunner.js"
   },
   "dependencies": {
     "@emotion/react": "^11.11.3",

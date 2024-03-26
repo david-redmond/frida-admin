@@ -21,7 +21,7 @@ const publicUrlOrPath = getPublicUrlOrPath(
   process.env.PUBLIC_URL
 );
 
-const buildPath = process.env.BUILD_PATH || '../public';
+const buildPath = process.env.BUILD_PATH || './public';
 
 const moduleFileExtensions = [
   'web.mjs',
@@ -54,9 +54,9 @@ const resolveModule = (resolveFn, filePath) => {
 module.exports = {
   dotenv: resolveApp('.env'),
   appPath: resolveApp('.'),
-  appBuild: resolveApp(buildPath),
-  appPublic: resolveApp('public'),
-  appHtml: resolveApp('public/index.html'),
+  appBuild: resolveApp('public'),
+  appPublic: resolveApp('src/publicFiles'),
+  appHtml: resolveApp('src/publicFiles/index.html'),
   appIndexJs: resolveModule(resolveApp, 'src/index'),
   appPackageJson: resolveApp('package.json'),
   appSrc: resolveApp('src'),
