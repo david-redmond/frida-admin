@@ -27,13 +27,10 @@ const server = http.createServer((req, res) => {
 
   let filePath;
   if (otherDocs.includes(req.url)) {
-    console.log(1);
     filePath = path.join(PUBLIC_DIR, req.url);
   } else if (req.url.startsWith("/static/")) {
-    console.log(2);
     filePath = path.join(PUBLIC_DIR, req.url);
   } else {
-    console.log(3);
     filePath = path.join(PUBLIC_DIR, "index.html");
   }
 
