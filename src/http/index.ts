@@ -2,7 +2,7 @@ import axios from "axios";
 
 const http = axios.create({
   baseURL:
-    process.env.REACT_APP_GATEWAY_URL,
+  window.__gatewayURL__ || 'missing-gateway-url',
   headers: {
     "Content-Type": "application/json",
   },
@@ -21,8 +21,7 @@ http.interceptors.request.use(function (config) {
 });
 
 const httpAuth = axios.create({
-  baseURL:
-  process.env.REACT_APP_AUTH_URL,
+  baseURL: window.__authURL__ || 'missing-auth-url',
   headers: {
     "Content-Type": "application/json",
   },

@@ -7,6 +7,14 @@ const PUBLIC_DIR = path.join(__dirname, "public");
 
 const server = http.createServer((req, res) => {
   // Determine the requested file path
+  if (req.url === '/environment.js') {
+    const data = `
+      window.__gatewayURL__ = "${process.env.REACT_APP_GATEWAY_URL}";
+      window.__authURL__ = "${process.env.REACT_APP_AUTH_URL}";
+    `;
+    res.writeHead(200, { "Content-Type": "text/javascript" });
+    res.end(data);
+  }
 
   const otherDocs = [
     "asset-manifest.json",
