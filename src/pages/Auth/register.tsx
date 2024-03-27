@@ -34,7 +34,7 @@ export default function SignUp(props: any) {
     };
     try {
       const response = await registerNewUser(payload);
-      if (response.status === 200) {
+      if (response.status >= 200 && response.status <= 299) {
         const token = await loginUser({
           email: data.get("email"),
           password: data.get("password"),

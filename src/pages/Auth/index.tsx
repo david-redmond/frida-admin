@@ -13,6 +13,7 @@ import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
 import { httpAuth } from "../../http";
 import Copyright from "../../components/Copyright";
+import Routes from "../../routes";
 
 interface ICredentials {
   email: FormDataEntryValue | null;
@@ -111,13 +112,13 @@ export default function SignInSide(props: any) {
               Sign In
             </Button>
             <Grid container>
-              <Grid item xs>
-                <Link href="Auth#" variant="body2">
-                  Forgot password?
-                </Link>
-              </Grid>
+              {/*<Grid item xs>*/}
+              {/*  <Link href={Routes.resetPassword}  variant="body2">*/}
+              {/*    Forgot password?*/}
+              {/*  </Link>*/}
+              {/*</Grid>*/}
               <Grid item>
-                <Link href="/Auth/register" variant="body2">
+                <Link href={Routes.register} variant="body2">
                   {"Don't have an account? Sign Up"}
                 </Link>
               </Grid>
