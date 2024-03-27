@@ -20,10 +20,19 @@ COPY . .
 RUN npm run build
 
 # Use the official nginx image as base
-FROM nginx
+FROM node:16-alpine3.18
 
-# Copy the contents of the public folder to the nginx html directory
-COPY --from=build app/public /usr/share/nginx/html
+WORKDIR /usr/src/app
 
-# Expose port 4100 for incoming connections
+COPY server.js ./
+COPY --from=build app/public/ ./public
+
+ENV REACT_APP_GATEWAY_URL=""
+ENV REACT_APP_AUTH_URL=""
+ENV PORT=4100
+
+# Expose port 4100
 EXPOSE 4100
+
+# Command to run the Node.js server
+CMD ["node", "server.js"]
