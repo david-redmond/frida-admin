@@ -81,9 +81,14 @@ export default function PageWrapper(props: any) {
   const activeCompanyName = useSelector((state: RootState) => {
     const { activeCompanyId } = state.user;
     // @ts-ignore
-    const company = state.associatedCompanies.find(company => company.id === activeCompanyId);
+    const company = state.associatedCompanies.find(
+      (company) => company.id === activeCompanyId,
+    );
     return !!company?.name ? company.name : "";
   });
+  const hasAssociatedCompanies = useSelector(
+    (state: RootState) => state.associatedCompanies.length > 0,
+  );
 
   const { deleteToken } = useToken();
   const toggleDrawer = () => {
@@ -128,12 +133,7 @@ export default function PageWrapper(props: any) {
           >
             {pageTitle}
           </Typography>
-          <Typography
-            variant="caption"
-            color="inherit"
-            noWrap
-            sx={{ mr: 1}}
-          >
+          <Typography variant="caption" color="inherit" noWrap sx={{ mr: 1 }}>
             {activeCompanyName}
           </Typography>
           <IconButton color="inherit">
@@ -165,7 +165,7 @@ export default function PageWrapper(props: any) {
         <List component="nav">
           <MainListItems />
           <Divider sx={{ my: 1 }} />
-          <SecondaryListItems />
+          {hasAssociatedCompanies && <SecondaryListItems />}
         </List>
       </Drawer>
       <Box

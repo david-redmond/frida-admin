@@ -31,6 +31,7 @@ interface IProps extends IMapState {}
 
 interface IMapState {
   associatedCompanies: IAssociatedCompany[];
+  hasAssociatedCompanies: boolean;
   user: IUser | null;
 }
 
@@ -41,7 +42,11 @@ const ResponsiveContainer = styled(Container)({
   },
 });
 
-const ProfilePage: React.FC<any> = ({ associatedCompanies, user }: IProps) => {
+const ProfilePage: React.FC<any> = ({
+  associatedCompanies,
+  user,
+  hasAssociatedCompanies,
+}: IProps) => {
   const [companyRequest, setCompanyRequest] = useState("");
   const [newCompany, setNewCompany] = useState("");
   const handleRequestSubmit = () => {
@@ -150,78 +155,89 @@ const ProfilePage: React.FC<any> = ({ associatedCompanies, user }: IProps) => {
             </Grid>
           </Paper>
         </Grid>
-        <Grid item xs={12} md={8}>
-          <Paper
-            style={{ padding: "16px", boxShadow: "0 4px 8px rgba(0,0,0,0.1)" }}
-          >
-            <Typography variant="h6" gutterBottom>
-              Associated Companies
-            </Typography>
-            {/* Company Cards */}
-            {associatedCompanies.map((company: IAssociatedCompany) => (
-              <Card key={company.id} sx={{ marginBottom: 2, px: 4, py: 2 }}>
-                <CardContent>
-                  <Typography variant="h4">{company.name}</Typography>
-                  <div style={{ display: "flex" }}>
-                    <CardContent
-                      style={{ display: "flex", flexDirection: "column" }}
+        {hasAssociatedCompanies && (
+          <Grid item xs={12} md={8}>
+            <Paper
+              style={{
+                padding: "16px",
+                boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
+              }}
+            >
+              <Typography variant="h6" gutterBottom>
+                Associated Companies
+              </Typography>
+              {/* Company Cards */}
+              {associatedCompanies.map((company: IAssociatedCompany) => (
+                <Card key={company.id} sx={{ marginBottom: 2, px: 4, py: 2 }}>
+                  <CardContent>
+                    <Typography variant="h4">{company.name}</Typography>
+                    <div style={{ display: "flex" }}>
+                      <CardContent
+                        style={{ display: "flex", flexDirection: "column" }}
+                      >
+                        <Typography variant="caption">
+                          Admin: {company.person}
+                        </Typography>
+                        <Typography variant="caption">
+                          Email: {company.email}
+                        </Typography>
+                        <Typography variant="caption">
+                          Phone: {company.phone}
+                        </Typography>
+                        <Typography variant="caption">
+                          Website: {company.website}
+                        </Typography>
+                      </CardContent>
+                      <CardContent
+                        style={{ display: "flex", flexDirection: "column" }}
+                      >
+                        <Typography variant="caption">Address</Typography>
+                        <Typography variant="caption">
+                          {company.address.addressLine1}
+                        </Typography>
+                        <Typography variant="caption">
+                          {company.address.addressLine2}
+                        </Typography>
+                        <Typography variant="caption">
+                          {company.address.city}
+                        </Typography>
+                        <Typography variant="caption">
+                          {company.address.state}
+                        </Typography>
+                        <Typography variant="caption">
+                          {company.address.zipcode}
+                        </Typography>
+                        <Typography variant="caption">
+                          {company.address.country}
+                        </Typography>
+                      </CardContent>
+                    </div>
+                    <Typography variant="body2">
+                      Website subdomain:{" "}
+                      <a
+                        href={`http://${company.clientPublicId}.project-frida.online`}
+                        target="_blank"
+                      >
+                        {company.clientPublicId}{" "}
+                      </a>
+                    </Typography>
+                  </CardContent>
+                  <CardActions
+                    sx={{ justifyContent: "right", marginTop: "-50px" }}
+                  >
+                    <IconButton
+                      edge="end"
+                      aria-label="edit"
+                      onClick={() => null}
                     >
-                      <Typography variant="caption">
-                        Admin: {company.person}
-                      </Typography>
-                      <Typography variant="caption">
-                        Email: {company.email}
-                      </Typography>
-                      <Typography variant="caption">
-                        Phone: {company.phone}
-                      </Typography>
-                      <Typography variant="caption">
-                        Website: {company.website}
-                      </Typography>
-                    </CardContent>
-                    <CardContent
-                      style={{ display: "flex", flexDirection: "column" }}
-                    >
-                      <Typography variant="caption">Address</Typography>
-                      <Typography variant="caption">
-                        {company.address.addressLine1}
-                      </Typography>
-                      <Typography variant="caption">
-                        {company.address.addressLine2}
-                      </Typography>
-                      <Typography variant="caption">
-                        {company.address.city}
-                      </Typography>
-                      <Typography variant="caption">
-                        {company.address.state}
-                      </Typography>
-                      <Typography variant="caption">
-                        {company.address.zipcode}
-                      </Typography>
-                      <Typography variant="caption">
-                        {company.address.country}
-                      </Typography>
-                    </CardContent>
-                  </div>
-                  <Typography variant="body2">
-                    Website subdomain:{" "}
-                    <a
-                      href={`http://${company.clientPublicId}.project-frida.com:3000`}
-                      target="_blank"
-                    >
-                      {company.clientPublicId}{" "}
-                    </a>
-                  </Typography>
-                </CardContent>
-                <CardActions sx={{justifyContent: "right", marginTop: "-50px"}}>
-                  <IconButton edge="end" aria-label="edit" onClick={() => null}>
-                    <Edit />
-                  </IconButton>
-                </CardActions>
-              </Card>
-            ))}
-          </Paper>
-        </Grid>
+                      <Edit />
+                    </IconButton>
+                  </CardActions>
+                </Card>
+              ))}
+            </Paper>
+          </Grid>
+        )}
       </Grid>
     </ResponsiveContainer>
   );
@@ -229,9 +245,10 @@ const ProfilePage: React.FC<any> = ({ associatedCompanies, user }: IProps) => {
 
 const mapStateToProps = (state: RootState): IMapState => ({
   associatedCompanies: state.associatedCompanies,
+  hasAssociatedCompanies: state.associatedCompanies.length > 0,
   user: state.user.user,
 });
 
 export default connect(mapStateToProps, { addCompany, removeCompany })(
-  ProfilePage
+  ProfilePage,
 );
