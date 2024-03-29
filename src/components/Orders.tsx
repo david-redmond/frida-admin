@@ -6,7 +6,7 @@ import TableCell from "@mui/material/TableCell";
 import TableHead from "@mui/material/TableHead";
 import TableRow from "@mui/material/TableRow";
 import Title from "./Title";
-import { IOrdersState } from "../store/interfaces";
+import {IOrder, IOrdersState, IProduct} from "../store/interfaces";
 import {
   Button,
   Modal,
@@ -68,17 +68,19 @@ export default function Orders({ rows, title }: IProps) {
           </TableRow>
         </TableHead>
         <TableBody>
-          {rows.map((row) => {
-            const { customer, timestamp, basket, orderRef } = row;
+          {rows.map((row: IOrder) => {
+            const { customer, shippingAddress, timestamp, basket, orderRef } = row;
             const dateObject = new Date(timestamp);
             const name = `${customer.firstname} ${customer.surname}`;
-            const address = `${customer.address1}, ${customer.address2}, ${customer.city}, ${customer.state}, ${customer.zipCode}`;
+            const address = shippingAddress
+              ? `${shippingAddress.address1}, ${shippingAddress.address2}, ${shippingAddress.city}, ${shippingAddress.state}, ${shippingAddress.zipCode}`
+              : " - ";
             return (
               <TableRow key={orderRef} onClick={() => handleOrderClick(row)}>
                 <TableCell>
                   {dateObject.toLocaleDateString("en-US", options)}
                 </TableCell>
-                <TableCell>{orderRef.substring(0, 6)}</TableCell>
+                <TableCell>{orderRef}</TableCell>
                 <TableCell>{name}</TableCell>
                 <TableCell>{address}</TableCell>
                 <TableCell align="right">{`$${basket.total}`}</TableCell>
@@ -109,7 +111,7 @@ export default function Orders({ rows, title }: IProps) {
             <>
               <Typography>{`Order Ref: ${selectedOrder.orderRef}`}</Typography>
               <Typography>{`Basket Total: ${selectedOrder.basket.total}`}</Typography>
-              {selectedOrder.basket.items.map((item: { quantity: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; title: string | number | boolean | React.ReactElement<any, string | React.JSXElementConstructor<any>> | Iterable<React.ReactNode> | React.ReactPortal | null | undefined; }) => {
+              {selectedOrder.basket.items.map((item: IProduct) => {
                 return (
                   <Typography>
                     <div>{item.quantity}x</div>

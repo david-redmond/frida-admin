@@ -1,9 +1,18 @@
 // reducers
 import { IStepsTypes } from "../../../src/modules/cms/interface";
 import { IThemeColors, IThemeLogo } from "../../../src/modules/theme/interface";
-import { IProduct } from "../../../src/modules/products/interface";
-import { IOrder } from '../../../src/modules/orders/interface';
 
+export interface IProduct {
+  available: boolean;
+  clientId: string;
+  description: string;
+  duration: string | null;
+  image: string;
+  price: number;
+  productId: string;
+  quantity?: number;
+  title: string;
+}
 export interface UserState {
   isLoggedIn: boolean;
   activeCompanyId: string;
@@ -59,6 +68,36 @@ export interface IUIState {
 }
 export type IProductState = IProduct[];
 
+export interface IBasket {
+  total: number;
+  items: IProduct[]
+}
+export interface ICustomer {
+  firstname: string;
+  surname: string;
+  email: string;
+  phone: string;
+}
+
+export interface IAddress {
+  firstname: string;
+  surname: string;
+  address1: string;
+  address2: string;
+  city: string;
+  state: string;
+  zipCode: string;
+  country: string;
+}
+export interface IOrder {
+  orderRef: number;
+  timestamp: string;
+  _id: string;
+  clientId: string;
+  customer: ICustomer;
+  basket: IBasket;
+  shippingAddress?: IAddress;
+}
 export type IOrdersState = IOrder[];
 
 export interface RootState {
