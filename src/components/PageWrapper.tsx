@@ -155,10 +155,14 @@ export default function PageWrapper(props: any) {
             alignItems: "center",
             justifyContent: "flex-end",
             px: [1],
+            background: '#1976d2'
           }}
         >
+          <div className={"Logo"}>
+            Project Frida
+          </div>
           <IconButton onClick={toggleDrawer}>
-            <ChevronLeftIcon />
+            <ChevronLeftIcon sx={{color: 'white'}}/>
           </IconButton>
         </Toolbar>
         <Divider />

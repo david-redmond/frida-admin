@@ -35,10 +35,10 @@ function _HomePage(props: IProps) {
       <Grid container>
         <Paper style={{ margin: "auto", padding: "16px" }}>
           <Typography variant="h6" gutterBottom>
-            Connect to a company
+            Connect to an existing company
           </Typography>
           <TextField
-            label="Company Name"
+            label="Company Name*"
             variant="outlined"
             fullWidth
             value={newCompanyName}
@@ -46,13 +46,16 @@ function _HomePage(props: IProps) {
             sx={{ marginBottom: 2 }}
           />
           <TextField
-            label="Company ID"
+            label="Company ID*"
             variant="outlined"
             fullWidth
             value={newCompanyId}
             onChange={(e) => setNewCompanyId(e.target.value)}
             sx={{ marginBottom: 2 }}
           />
+            <Typography variant="body2" gutterBottom sx={{ marginBottom: 2 }}>
+                *Ask the admin for these details.
+            </Typography>
           <Button
             variant="contained"
             color="primary"
