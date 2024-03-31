@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import AppRoutes from "./routes";
@@ -20,6 +20,7 @@ import {
 import WebsiteSettings from "./pages/websiteSettings";
 import PageWrapper from "./components/PageWrapper";
 import Profile from "./pages/profile";
+import { CircularProgress } from "@mui/material";
 
 let isFetching: boolean = false;
 
@@ -27,6 +28,7 @@ function App() {
   const dispatch = useDispatch();
 
   const { token, setToken } = UseToken();
+  const [hasUser, setHasUser] = useState<boolean>(false);
 
   React.useEffect(() => {
     !!token && fetchUser();
@@ -55,7 +57,7 @@ function App() {
       return;
     }
     isFetching = true;
-    const response = await http.get("/api/user");
+    const response = await http.get("/api/user/");
     if (!!response && !!response.data) {
       // @ts-ignore
       dispatch(setUserDetails(response.data));
@@ -69,15 +71,25 @@ function App() {
           response.data.associatedClients.map(async (_clientId: string) => {
             const clientResponse = await http.get(`/api/client/${_clientId}`);
             allClients.push(clientResponse.data);
-          })
+          }),
         );
         dispatch(initializeActiveCompanyId(activeCompanyId));
         dispatch(setAssociatedCompanies(allClients));
       }
     }
+    setHasUser(true);
     isFetching = false;
   };
 
+  if (!hasUser) {
+    return (
+      <PageWrapper>
+        <div style={{ display: "flex", height: '60vh'}}>
+          <CircularProgress sx={{ margin: "auto" }} />
+        </div>
+      </PageWrapper>
+    );
+  }
   return (
     <PageWrapper>
       <Routes>
