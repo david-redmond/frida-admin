@@ -26,7 +26,9 @@ export interface IUser {
   email: string;
   position: string;
   image: string;
-  associatedClients: string[];
+  attributes: {
+    associatedClients: string[]
+  };
 }
 
 export type AssociatedCompanies = Array<ICompany>;
