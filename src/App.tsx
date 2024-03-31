@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import "./App.css";
 import { Routes, Route } from "react-router-dom";
 import AppRoutes from "./routes";
@@ -20,6 +20,9 @@ import {
 import WebsiteSettings from "./pages/websiteSettings";
 import PageWrapper from "./components/PageWrapper";
 import Profile from "./pages/profile";
+import { CircularProgress } from "@mui/material";
+import { IUser } from "./store/interfaces";
+import { AxiosResponse } from "axios";
 
 let isFetching: boolean = false;
 
@@ -27,6 +30,7 @@ function App() {
   const dispatch = useDispatch();
 
   const { token, setToken } = UseToken();
+  const [hasUser, setHasUser] = useState<boolean>(false);
 
   React.useEffect(() => {
     !!token && fetchUser();
@@ -55,29 +59,40 @@ function App() {
       return;
     }
     isFetching = true;
-    const response = await http.get("/api/user");
+    const response: AxiosResponse<IUser> = await http.get("/api/user/");
     if (!!response && !!response.data) {
       // @ts-ignore
       dispatch(setUserDetails(response.data));
       dispatch(setUserLoggedIn());
-
+      const { associatedClients } = response.data.attributes;
       const allClients: any[] = [];
-      const activeCompanyId = response.data.associatedClients[0];
+
+      const activeCompanyId = associatedClients[0];
 
       if (!!activeCompanyId) {
         await Promise.allSettled(
-          response.data.associatedClients.map(async (_clientId: string) => {
+          associatedClients.map(async (_clientId: string) => {
             const clientResponse = await http.get(`/api/client/${_clientId}`);
             allClients.push(clientResponse.data);
-          })
+          }),
         );
         dispatch(initializeActiveCompanyId(activeCompanyId));
         dispatch(setAssociatedCompanies(allClients));
       }
     }
+    setHasUser(true);
     isFetching = false;
   };
 
+  if (!hasUser) {
+    return (
+      <PageWrapper>
+        <div style={{ display: "flex", height: "60vh" }}>
+          <CircularProgress sx={{ margin: "auto" }} />
+        </div>
+      </PageWrapper>
+    );
+  }
   return (
     <PageWrapper>
       <Routes>

@@ -7,9 +7,7 @@ import Orders from "../../components/Orders";
 import { connect, useDispatch } from "react-redux";
 import { setPageTitle } from "../../store/actions";
 import { RootState } from "../../store/interfaces";
-import { Button, TextField, Typography } from "@mui/material";
-import { useState } from "react";
-import connectCompanyToUser from "../../api/connectCompanyToUser";
+import CreateCompany from "../CreateCompany";
 
 interface IMapsState {
   hasAssociatedCompanies: boolean;
@@ -27,51 +25,8 @@ function _HomePage(props: IProps) {
     );
   });
 
-  const [newCompanyName, setNewCompanyName] = useState("");
-  const [newCompanyId, setNewCompanyId] = useState("");
-
   if (!props.hasAssociatedCompanies) {
-    return (
-      <Grid container>
-        <Paper style={{ margin: "auto", padding: "16px" }}>
-          <Typography variant="h6" gutterBottom>
-            Connect to an existing company
-          </Typography>
-          <TextField
-            label="Company Name*"
-            variant="outlined"
-            fullWidth
-            value={newCompanyName}
-            onChange={(e) => setNewCompanyName(e.target.value)}
-            sx={{ marginBottom: 2 }}
-          />
-          <TextField
-            label="Company ID*"
-            variant="outlined"
-            fullWidth
-            value={newCompanyId}
-            onChange={(e) => setNewCompanyId(e.target.value)}
-            sx={{ marginBottom: 2 }}
-          />
-            <Typography variant="body2" gutterBottom sx={{ marginBottom: 2 }}>
-                *Ask the admin for these details.
-            </Typography>
-          <Button
-            variant="contained"
-            color="primary"
-            onClick={() =>
-              connectCompanyToUser({
-                companyName: newCompanyName,
-                companyId: newCompanyId,
-              })
-            }
-            sx={{ marginBottom: 2 }}
-          >
-            Connect Company
-          </Button>
-        </Paper>
-      </Grid>
-    );
+    return <CreateCompany />;
   }
 
   return (

@@ -6,7 +6,6 @@ import {
   Grid,
   Paper,
   Button,
-  Divider,
   TextField,
   List,
   ListItem,
@@ -15,12 +14,11 @@ import {
   IconButton,
   Card,
   CardContent,
-  Box,
   CardActions,
 } from "@mui/material";
 import { styled } from "@mui/system";
 import { connect } from "react-redux";
-import { IAssociatedCompany, IUser, RootState } from "../../store/interfaces";
+import { ICompany, IUser, RootState } from "../../store/interfaces";
 import { Delete, Edit } from "@mui/icons-material";
 
 // Dummy functions for addCompany and removeCompany
@@ -30,7 +28,7 @@ const removeCompany = (companyId: string) => null;
 interface IProps extends IMapState {}
 
 interface IMapState {
-  associatedCompanies: IAssociatedCompany[];
+  associatedCompanies: ICompany[];
   hasAssociatedCompanies: boolean;
   user: IUser | null;
 }
@@ -135,7 +133,7 @@ const ProfilePage: React.FC<any> = ({
                     Add Company
                   </Button>
                   <List>
-                    {associatedCompanies.map((company: IAssociatedCompany) => (
+                    {associatedCompanies.map((company: ICompany) => (
                       <ListItem key={company.id}>
                         <ListItemText primary={company.name} />
                         <ListItemSecondaryAction>
@@ -167,7 +165,7 @@ const ProfilePage: React.FC<any> = ({
                 Associated Companies
               </Typography>
               {/* Company Cards */}
-              {associatedCompanies.map((company: IAssociatedCompany) => (
+              {associatedCompanies.map((company: ICompany) => (
                 <Card key={company.id} sx={{ marginBottom: 2, px: 4, py: 2 }}>
                   <CardContent>
                     <Typography variant="h4">{company.name}</Typography>
@@ -176,16 +174,16 @@ const ProfilePage: React.FC<any> = ({
                         style={{ display: "flex", flexDirection: "column" }}
                       >
                         <Typography variant="caption">
-                          Admin: {company.person}
+                          Admin: {company.contact.person}
                         </Typography>
                         <Typography variant="caption">
-                          Email: {company.email}
+                          Email: {company.contact.email}
                         </Typography>
                         <Typography variant="caption">
-                          Phone: {company.phone}
+                          Phone: {company.contact.phone}
                         </Typography>
                         <Typography variant="caption">
-                          Website: {company.website}
+                          Website: {company.contact.website}
                         </Typography>
                       </CardContent>
                       <CardContent

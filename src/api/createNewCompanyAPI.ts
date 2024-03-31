@@ -1,23 +1,16 @@
 import http from "../http";
-import {toggleToastMessage} from "../store/actions";
+import {INewCompany} from "../store/interfaces";
 import Routes from "../routes";
+import {toggleToastMessage} from "../store/actions";
 
-interface IArgs {
-    companyName: string;
-    companyId: string;
-    dispatch: any;
-}
-export default async ({companyName, companyId, dispatch}: IArgs) => {
+export default async (company: INewCompany, dispatch: any) => {
     try {
-        const data = {
-            companyName,
-            companyId
-        };
-        const response = await http.put("/api/user/add-company", data);
+
+        const response = await http.post("/api/client", company);
 
         if (response.status >= 200 && response.status <= 299) {
             dispatch(toggleToastMessage({
-                message: "Connection successfully.",
+                message: "New company successfully created.",
                 showToast: "success"
             }))
             setTimeout(() => window.location.href = Routes.home, 1000);
@@ -25,7 +18,7 @@ export default async ({companyName, companyId, dispatch}: IArgs) => {
     } catch (e: any) {
         console.error("Error: ConnectCompanyToUser", e);
         dispatch(toggleToastMessage({
-            message: "Error connecting the company.",
+            message: "Error creating a new company.",
             showToast: "error"
         }))
     }

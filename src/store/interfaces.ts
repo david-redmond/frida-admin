@@ -26,12 +26,15 @@ export interface IUser {
   email: string;
   position: string;
   image: string;
-  associatedClients: string[];
+  attributes: {
+    associatedClients: string[]
+  };
 }
 
-export type AssociatedCompanies = Array<IAssociatedCompany>;
+export type AssociatedCompanies = Array<ICompany>;
 
-export interface IAssociatedCompany {
+export interface INewCompany {
+  name: string;
   address: {
     addressLine1: string;
     addressLine2: string;
@@ -40,13 +43,20 @@ export interface IAssociatedCompany {
     state: string;
     zipcode: string;
   };
-  clientPublicId: string;
-  email: string;
+  contact: {
+    person: string;
+    position: IUserPositionType;
+    email: string;
+    phone: string;
+    website: string;
+  };
+}
+
+export type IUserPositionType = "owner" | "admin" | "standard";
+
+export interface ICompany extends INewCompany {
   id: string;
-  name: string;
-  person: string;
-  phone: string;
-  website: string;
+  clientPublicId: string;
 }
 
 export interface CompanyState {
@@ -70,7 +80,7 @@ export type IProductState = IProduct[];
 
 export interface IBasket {
   total: number;
-  items: IProduct[]
+  items: IProduct[];
 }
 export interface ICustomer {
   firstname: string;
