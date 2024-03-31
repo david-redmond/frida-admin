@@ -3,10 +3,12 @@ import Paper from "@mui/material/Paper";
 import { Button, TextField, Typography } from "@mui/material";
 import connectCompanyToUser from "../../api/connectCompanyToUser";
 import Grid from "@mui/material/Grid";
+import { useDispatch } from "react-redux";
 
 function ExistingCompany() {
   const [newCompanyName, setNewCompanyName] = useState("");
   const [newCompanyId, setNewCompanyId] = useState("");
+  const dispatch = useDispatch();
   return (
     <Grid container>
       <Paper style={{ margin: "auto", padding: "16px" }}>
@@ -39,6 +41,7 @@ function ExistingCompany() {
             connectCompanyToUser({
               companyName: newCompanyName,
               companyId: newCompanyId,
+              dispatch,
             })
           }
           sx={{ marginBottom: 2 }}

@@ -2,13 +2,15 @@ import React, { useState } from "react";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import { Button, MenuItem, Select, TextField, Typography } from "@mui/material";
-import {INewCompany, IUser, IUserPositionType} from "../../store/interfaces";
+import { INewCompany, IUser, IUserPositionType } from "../../store/interfaces";
 import createNewCompanyAPI from "../../api/createNewCompanyAPI";
+import { useDispatch } from "react-redux";
 
 interface ICreateNewCompanyProps {
   user: IUser | null;
 }
 function CreateNewCompany(props: ICreateNewCompanyProps) {
+  const dispatch = useDispatch();
   const [company, setCompany] = useState<INewCompany>({
     name: "",
     contact: {
@@ -229,7 +231,7 @@ function CreateNewCompany(props: ICreateNewCompanyProps) {
         <Button
           variant="contained"
           color="primary"
-          onClick={() => createNewCompanyAPI(company)}
+          onClick={() => createNewCompanyAPI(company, dispatch)}
           sx={{ marginBottom: 2 }}
         >
           Create
