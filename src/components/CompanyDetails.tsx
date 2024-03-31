@@ -4,7 +4,7 @@ import CardContent from "@mui/material/CardContent";
 import Typography from "@mui/material/Typography";
 import Button from "@mui/material/Button";
 import TextField from "@mui/material/TextField";
-import { IAssociatedCompany, RootState } from "../store/interfaces";
+import { ICompany, RootState } from "../store/interfaces";
 import { connect } from "react-redux";
 
 interface IProps extends IMapState {}
@@ -12,7 +12,7 @@ interface IProps extends IMapState {}
 const CompanyDetails = ({ companyDetails }: IProps) => {
   const [editMode, setEditMode] = useState<boolean>(false);
   const [editedDetails, setEditedDetails] =
-    useState<IAssociatedCompany>(companyDetails);
+    useState<ICompany>(companyDetails);
 
   const handleEditToggle = () => {
     setEditMode(!editMode);
@@ -36,7 +36,7 @@ const CompanyDetails = ({ companyDetails }: IProps) => {
     setEditMode(false);
   };
 
-  const company = editMode ? editedDetails : companyDetails;
+  const company: ICompany = editMode ? editedDetails : companyDetails;
 
   if (!company?.name) {
     return <>None Selected</>;
@@ -47,15 +47,15 @@ const CompanyDetails = ({ companyDetails }: IProps) => {
         <Typography variant="h5" gutterBottom>
           {company.name}
         </Typography>
-        <Typography variant="subtitle1">{company.person}</Typography>
+        <Typography variant="subtitle1">{company.contact.person}</Typography>
         <Typography variant="body2" color="textSecondary">
-          {company.email}
+          {company.contact.email}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          {company.phone}
+          {company.contact.phone}
         </Typography>
         <Typography variant="body2" color="textSecondary">
-          {company.website}
+          {company.contact.website}
         </Typography>
         <Typography variant="body2" color="textSecondary">
           {company.clientPublicId}
@@ -114,14 +114,14 @@ const mapState = (state: RootState): IMapState => {
   return {
     // @ts-ignore
     companyDetails: state.associatedCompanies.find(
-      (company: IAssociatedCompany) => company.id === activeCompanyId
+      (company: ICompany) => company.id === activeCompanyId
     ),
     activeCompanyId: state.user.activeCompanyId,
   };
 };
 
 interface IMapState {
-  companyDetails: IAssociatedCompany;
+  companyDetails: ICompany;
 }
 
 export default connect(mapState)(CompanyDetails);
