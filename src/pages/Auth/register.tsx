@@ -11,6 +11,7 @@ import Typography from "@mui/material/Typography";
 import Container from "@mui/material/Container";
 import { httpAuth } from "../../http";
 import Copyright from "../../components/Copyright";
+import Routes from "../../routes";
 
 async function registerNewUser(credentials: any) {
   const response = await httpAuth.post("/register", credentials);
@@ -19,6 +20,7 @@ async function registerNewUser(credentials: any) {
 
 async function loginUser(credentials: any) {
   const response = await httpAuth.post("/login", credentials);
+  window.location.href = Routes.home;
   return response.data;
 }
 

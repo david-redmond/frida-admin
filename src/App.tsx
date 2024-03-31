@@ -64,7 +64,8 @@ function App() {
       // @ts-ignore
       dispatch(setUserDetails(response.data));
       dispatch(setUserLoggedIn());
-      const { associatedClients } = response.data.attributes;
+      const { attributes = {} } = response.data;
+      const associatedClients = attributes?.companies || [];
       const allClients: any[] = [];
 
       const activeCompanyId = associatedClients[0];

@@ -24,10 +24,9 @@ export interface IUser {
   firstname: string;
   surname: string;
   email: string;
-  position: string;
-  image: string;
+  image?: string;
   attributes: {
-    associatedClients: string[]
+    companies?: string[]
   };
 }
 
