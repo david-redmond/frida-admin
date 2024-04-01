@@ -81,7 +81,7 @@ const ProfilePage: React.FC<any> = ({
   return (
     <ResponsiveContainer>
       <Grid container spacing={3} justifyContent="center">
-        <Grid item xs={12} md={8}>
+        <Grid item>
           <Paper
             style={{ padding: "16px", boxShadow: "0 4px 8px rgba(0,0,0,0.1)" }}
           >
@@ -103,15 +103,15 @@ const ProfilePage: React.FC<any> = ({
                   <Typography variant="h5" mt={2}>
                     {!!user ? `${user.firstname} ${user.surname}` : "Guest"}
                   </Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    {!!user ? user.position : " "}
-                  </Typography>
+                  {/*<Typography variant="subtitle1" color="textSecondary">*/}
+                  {/*  {!!user ? user.position : " "}*/}
+                  {/*</Typography>*/}
                   <Button variant="outlined" sx={{ mt: 2 }}>
                     Edit Profile
                   </Button>
                 </Paper>
               </Grid>
-              <Grid item xs={12} md={8}>
+              <Grid item>
                 <Paper style={{ padding: "16px" }}>
                   <Typography variant="h6" gutterBottom>
                     Associated Companies
@@ -154,7 +154,7 @@ const ProfilePage: React.FC<any> = ({
           </Paper>
         </Grid>
         {hasAssociatedCompanies && (
-          <Grid item xs={12} md={8}>
+          <Grid item>
             <Paper
               style={{
                 padding: "16px",
@@ -164,75 +164,75 @@ const ProfilePage: React.FC<any> = ({
               <Typography variant="h6" gutterBottom>
                 Associated Companies
               </Typography>
-              {/* Company Cards */}
-              {associatedCompanies.map((company: ICompany) => (
-                <Card key={company.id} sx={{ marginBottom: 2, px: 4, py: 2 }}>
-                  <CardContent>
-                    <Typography variant="h4">{company.name}</Typography>
-                    <div style={{ display: "flex" }}>
-                      <CardContent
-                        style={{ display: "flex", flexDirection: "column" }}
-                      >
-                        <Typography variant="caption">
-                          Admin: {company.contact.person}
-                        </Typography>
-                        <Typography variant="caption">
-                          Email: {company.contact.email}
-                        </Typography>
-                        <Typography variant="caption">
-                          Phone: {company.contact.phone}
-                        </Typography>
-                        <Typography variant="caption">
-                          Website: {company.contact.website}
-                        </Typography>
-                      </CardContent>
-                      <CardContent
-                        style={{ display: "flex", flexDirection: "column" }}
-                      >
-                        <Typography variant="caption">Address</Typography>
-                        <Typography variant="caption">
-                          {company.address.addressLine1}
-                        </Typography>
-                        <Typography variant="caption">
-                          {company.address.addressLine2}
-                        </Typography>
-                        <Typography variant="caption">
-                          {company.address.city}
-                        </Typography>
-                        <Typography variant="caption">
-                          {company.address.state}
-                        </Typography>
-                        <Typography variant="caption">
-                          {company.address.zipcode}
-                        </Typography>
-                        <Typography variant="caption">
-                          {company.address.country}
-                        </Typography>
-                      </CardContent>
-                    </div>
-                    <Typography variant="body2">
-                      Website subdomain:{" "}
-                      <a
-                        href={`http://${company.clientPublicId}.project-frida.online`}
-                        target="_blank"
-                      >
-                        {company.clientPublicId}{" "}
-                      </a>
-                    </Typography>
-                  </CardContent>
-                  <CardActions
-                    sx={{ justifyContent: "right", marginTop: "-50px" }}
-                  >
-                    <IconButton
-                      edge="end"
-                      aria-label="edit"
-                      onClick={() => null}
+                {/* Company Cards */}
+                {associatedCompanies.map((company: ICompany) => (
+                  <Card key={company.id} sx={{ marginBottom: 2, px: 4, py: 2 }}>
+                    <CardContent>
+                      <Typography variant="h4">{company.name}</Typography>
+                      <div style={{ display: "flex" }}>
+                        <CardContent
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
+                          <Typography variant="caption">
+                            Admin: {company.contact.person}
+                          </Typography>
+                          <Typography variant="caption">
+                            Email: {company.contact.email}
+                          </Typography>
+                          <Typography variant="caption">
+                            Phone: {company.contact.phone}
+                          </Typography>
+                          <Typography variant="caption">
+                            Website: {company.contact.website}
+                          </Typography>
+                        </CardContent>
+                        <CardContent
+                          style={{ display: "flex", flexDirection: "column" }}
+                        >
+                          <Typography variant="caption">Address</Typography>
+                          <Typography variant="caption">
+                            {company.address.addressLine1}
+                          </Typography>
+                          <Typography variant="caption">
+                            {company.address.addressLine2}
+                          </Typography>
+                          <Typography variant="caption">
+                            {company.address.city}
+                          </Typography>
+                          <Typography variant="caption">
+                            {company.address.state}
+                          </Typography>
+                          <Typography variant="caption">
+                            {company.address.zipcode}
+                          </Typography>
+                          <Typography variant="caption">
+                            {company.address.country}
+                          </Typography>
+                        </CardContent>
+                      </div>
+                      <Typography variant="body2">
+                        Website subdomain:{" "}
+                        <a
+                          href={`http://${company.clientPublicId}.project-frida.online`}
+                          target="_blank"
+                        >
+                          {company.clientPublicId}{" "}
+                        </a>
+                      </Typography>
+                    </CardContent>
+                    <CardActions
+                      sx={{ justifyContent: "right", marginTop: "-50px" }}
                     >
-                      <Edit />
-                    </IconButton>
-                  </CardActions>
-                </Card>
-              ))}
+                      <IconButton
+                        edge="end"
+                        aria-label="edit"
+                        onClick={() => null}
+                      >
+                        <Edit />
+                      </IconButton>
+                    </CardActions>
+                  </Card>
+                ))}
             </Paper>
           </Grid>
         )}

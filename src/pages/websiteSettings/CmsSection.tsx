@@ -149,20 +149,17 @@ const ComponentOrdering: React.FC<IProps> = (props) => {
                 Add to website
               </Button>
             </Paper>
-            <Button
-              variant="contained"
-              onClick={saveToDatabase}
-              style={{
-                right: 30,
-                bottom: 20,
-                position: "absolute",
-                width: "270px",
-              }}
-            >
-              Save changes
-            </Button>
           </Grid>
         </Grid>
+        <Button
+            variant="contained"
+            onClick={saveToDatabase}
+            style={{
+              marginTop: '20px'
+            }}
+        >
+          Save changes
+        </Button>
       </Container>
     </DndProvider>
   );
