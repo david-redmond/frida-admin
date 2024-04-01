@@ -14,7 +14,6 @@ interface IMapsState {
   hasAssociatedCompanies: boolean;
   isPublished: boolean;
   missingProducts: boolean;
-  activeCompanyId: string;
 }
 
 interface IProps extends IMapsState {}
@@ -36,7 +35,7 @@ function _HomePage(props: IProps) {
   if (!props.isPublished) {
     return (
       <Grid container spacing={3}>
-        <SignUpSteps activeCompanyId={props.activeCompanyId} />
+        <SignUpSteps />
       </Grid>
     );
   }
@@ -86,7 +85,6 @@ const mapState = (state: RootState): IMapsState => ({
       (company: ICompany) => company.id === state.user.activeCompanyId,
     )[0].published || false,
   missingProducts: state.products.length === 0,
-  activeCompanyId: state.user.activeCompanyId,
 });
 
 export default connect(mapState)(_HomePage);
