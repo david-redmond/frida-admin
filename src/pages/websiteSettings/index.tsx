@@ -1,25 +1,21 @@
-import React, {useState} from "react";
-import http from "../../http";
+import React, { useState } from "react";
 import { RootState } from "../../store/interfaces";
 import { connect, useDispatch } from "react-redux";
 import CmsSection from "./CmsSection";
-import { setCMS, setPageTitle, setThemeData } from "../../store/actions";
+import { setPageTitle } from "../../store/actions";
 import Accordian from "../../components/Accordian";
 import ImagesSection from "./ImagesSection";
 import ThemeSection from "./ThemeSection";
 import Spinner from "../../components/Spinner";
+import fetchWebsiteSettings from "../../api/fetchWebsiteSettings";
 
 interface WebsiteSettingsProps extends IMapState {}
 
 interface IMapState {
   activeCompanyId: string;
-  hasCmsContent: boolean;
 }
 
-const WebsiteSettings = ({
-  activeCompanyId,
-  hasCmsContent,
-}: WebsiteSettingsProps) => {
+const WebsiteSettings = ({ activeCompanyId }: WebsiteSettingsProps) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -27,19 +23,8 @@ const WebsiteSettings = ({
     dispatch(setPageTitle("Website Setting & Configuration"));
   });
   const fetchData = async () => {
-    try {
-      const response = await http.get(`/api/cms/${activeCompanyId}`);
-      if (!!response && !!response.data) {
-        dispatch(setCMS(response.data.cmsContent));
-      }
-      const themeResponse = await http.get(`/api/theme/${activeCompanyId}`);
-      if (!!themeResponse && !!themeResponse.data) {
-        dispatch(setThemeData(themeResponse.data));
-      }
-    } catch (e) {
-
-    }
-    setIsLoading(false)
+    await fetchWebsiteSettings(activeCompanyId, dispatch);
+    setIsLoading(false);
   };
 
   React.useEffect(() => {
@@ -50,17 +35,24 @@ const WebsiteSettings = ({
     return <Spinner />;
   }
 
-
   return (
     <>
       <Accordian
-        title={"Content Management"}
+        title={"Landing Page Content"}
         desciption={
           "Set the order, add and remove sections from the website according to your business modal."
         }
         defaultExpanded
       >
-        <CmsSection activeCompanyId={activeCompanyId} />
+        <CmsSection activeCompanyId={activeCompanyId} type={"landingPage"} />
+      </Accordian>
+      <Accordian
+        title={"Checkout Page Content"}
+        desciption={
+          "Set the order, add and remove sections from your checkout."
+        }
+      >
+        <CmsSection activeCompanyId={activeCompanyId} type={"checkout"} />
       </Accordian>
       <Accordian title={"Image Management"}>
         <ImagesSection activeCompanyId={activeCompanyId} />
@@ -74,6 +66,5 @@ const WebsiteSettings = ({
 
 const mapState = (state: RootState): IMapState => ({
   activeCompanyId: state.user.activeCompanyId,
-  hasCmsContent: state.websiteSettings.cms.length > 0,
 });
 export default connect(mapState)(WebsiteSettings);

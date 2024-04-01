@@ -3,19 +3,16 @@ import {
   SET_ACTIVE_COMPANY_ID,
   SET_ALL_ORDERS,
   SET_ASSOCIATED_COMPANIES,
-  SET_CMS,
+  SET_CMS_AND_THEME,
   SET_COMPANY_DETAILS,
   SET_PAGE_TITLE,
   SET_PRODUCTS,
-  SET_THEME,
   SET_TOAST_MESSAGES,
   SET_USER_DETAILS,
   SET_USER_LOGGED_IN,
   SET_USER_LOGGED_OUT
 } from "./constants";
-import { IStepsTypes } from "../../../src/modules/cms/interface";
-import { IToggleToastMessage } from "./interfaces";
-import { IProduct } from "../../../src/modules/products/interface";
+import {IProduct, IToggleToastMessage} from "./interfaces";
 import { IOrder } from "../../../src/modules/orders/interface";
 
 export const setUserDetails = (user: any) => {
@@ -61,10 +58,29 @@ export const setCompanyDetails = (company: any) => {
   };
 };
 
-export const setCMS = (payload: IStepsTypes[]) => {
+export const setCMS = (responseData: any) => {
   return {
-    type: SET_CMS,
-    payload,
+    type: SET_CMS_AND_THEME,
+    landingContent: [],
+    checkoutContent: [],
+    theme: {
+      colors: {
+        primaryLight: "",
+        primary: "",
+        primaryDark: "",
+        secondaryLight: "",
+        secondary: "",
+        secondaryDark: "",
+        secondaryText: "",
+        primaryText: "",
+        ...responseData,
+      },
+      logos: {
+        alt: "",
+        src: "",
+        ...responseData,
+      },
+    },
   };
 };
 
@@ -85,29 +101,6 @@ export const setOrders = (payload: IOrder[]) => {
   return {
     type: SET_ALL_ORDERS,
     payload,
-  };
-};
-export const setThemeData = ({ colors, logo }: { colors: any; logo: any }) => {
-  return {
-    type: SET_THEME,
-    payload: {
-      colors: {
-        primaryLight: "",
-        primary: "",
-        primaryDark: "",
-        secondaryLight: "",
-        secondary: "",
-        secondaryDark: "",
-        secondaryText: "",
-        primaryText: "",
-        ...colors,
-      },
-      logos: {
-        alt: "",
-        src: "",
-        ...logo,
-      },
-    },
   };
 };
 

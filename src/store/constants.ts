@@ -6,8 +6,7 @@ export const SET_ASSOCIATED_COMPANIES: string = "SET_ASSOCIATED_COMPANIES";
 export const SET_ACTIVE_COMPANY_ID: string = "SET_ACTIVE_COMPANY_ID";
 export const INITIALIZE_ACTIVE_COMPANY_ID: string =
   "INITIALIZE_ACTIVE_COMPANY_ID";
-export const SET_CMS: string = "SET_CMS";
-export const SET_THEME: string = "SET_THEME";
+export const SET_CMS_AND_THEME: string = "SET_CMS_AND_THEME";
 export const SET_PRODUCTS: string = "SET_PRODUCTS";
 export const SET_TOAST_MESSAGES: string = "SET_TOAST_MESSAGES";
 export const SET_PAGE_TITLE: string = "SET_PAGE_TITLE";

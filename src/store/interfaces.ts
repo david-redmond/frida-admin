@@ -25,7 +25,7 @@ export interface IUser {
   email: string;
   image?: string;
   attributes: {
-    companies?: string[]
+    companies?: string[];
   };
 }
 
@@ -62,13 +62,35 @@ export interface ICompany extends INewCompany {
 export interface CompanyState {
   // Define the type for company state
 }
+
+export type ILandingStepsTypes = "PRODUCTS_STEP" | "TIMESLOTS_STEP";
+
+export type ICheckoutStepsTypes = "SHIPPING_ADDRESS" | "CUSTOMER_DETAILS";
+
+export interface IThemeColors {
+  primaryLight: string;
+  primary: string;
+  primaryDark: string;
+  secondaryLight: string;
+  secondary: string;
+  secondaryDark: string;
+  secondaryText: string;
+  primaryText: string;
+}
+
+export interface IThemeLogo {
+  alt: string;
+  src: string;
+}
 export interface WebsiteSettingsState {
-  // cms: IStepsTypes[];
-  // possibleCmsComponents: IStepsTypes[];
-  // theme: {
-  //   colors: IThemeColors;
-  //   logos: IThemeLogo;
-  // };
+  landingContent: ILandingStepsTypes[];
+  allowedLandingComponents: ILandingStepsTypes[];
+  checkoutContent: ICheckoutStepsTypes[];
+  allowedCheckoutComponents: ICheckoutStepsTypes[];
+  theme: {
+    colors: IThemeColors;
+    logos: IThemeLogo;
+  };
 }
 
 export interface IUIState {
