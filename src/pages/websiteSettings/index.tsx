@@ -1,4 +1,4 @@
-import React from "react";
+import React, {useState} from "react";
 import http from "../../http";
 import { RootState } from "../../store/interfaces";
 import { connect, useDispatch } from "react-redux";
@@ -7,6 +7,7 @@ import { setCMS, setPageTitle, setThemeData } from "../../store/actions";
 import Accordian from "../../components/Accordian";
 import ImagesSection from "./ImagesSection";
 import ThemeSection from "./ThemeSection";
+import Spinner from "../../components/Spinner";
 
 interface WebsiteSettingsProps extends IMapState {}
 
@@ -20,28 +21,35 @@ const WebsiteSettings = ({
   hasCmsContent,
 }: WebsiteSettingsProps) => {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   React.useEffect(() => {
     dispatch(setPageTitle("Website Setting & Configuration"));
   });
   const fetchData = async () => {
-    const response = await http.get(`/api/cms/${activeCompanyId}`);
-    if (!!response && !!response.data) {
-      dispatch(setCMS(response.data.cmsContent));
+    try {
+      const response = await http.get(`/api/cms/${activeCompanyId}`);
+      if (!!response && !!response.data) {
+        dispatch(setCMS(response.data.cmsContent));
+      }
+      const themeResponse = await http.get(`/api/theme/${activeCompanyId}`);
+      if (!!themeResponse && !!themeResponse.data) {
+        dispatch(setThemeData(themeResponse.data));
+      }
+    } catch (e) {
+
     }
-    const themeResponse = await http.get(`/api/theme/${activeCompanyId}`);
-    if (!!themeResponse && !!themeResponse.data) {
-      dispatch(setThemeData(themeResponse.data));
-    }
+    setIsLoading(false)
   };
 
   React.useEffect(() => {
     fetchData();
   }, [activeCompanyId]);
 
-  if (!hasCmsContent) {
-    return <>Loading...</>;
+  if (isLoading) {
+    return <Spinner />;
   }
+
 
   return (
     <>

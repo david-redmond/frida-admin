@@ -20,9 +20,9 @@ import {
 import WebsiteSettings from "./pages/websiteSettings";
 import PageWrapper from "./components/PageWrapper";
 import Profile from "./pages/profile";
-import { CircularProgress } from "@mui/material";
 import { IUser } from "./store/interfaces";
 import { AxiosResponse } from "axios";
+import Spinner from "./components/Spinner";
 
 let isFetching: boolean = false;
 
@@ -86,13 +86,7 @@ function App() {
   };
 
   if (!hasUser) {
-    return (
-      <PageWrapper>
-        <div style={{ display: "flex", height: "60vh" }}>
-          <CircularProgress sx={{ margin: "auto" }} />
-        </div>
-      </PageWrapper>
-    );
+    return <Spinner />;
   }
   return (
     <PageWrapper>

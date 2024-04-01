@@ -1,16 +1,11 @@
 import React, { useEffect, useState } from "react";
 import { connect, useDispatch } from "react-redux";
 import {
-  Card,
-  CardContent,
-  Typography,
-  CardActions,
   Button,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  CircularProgress,
   TextField,
   FormControl,
   InputLabel,
@@ -23,11 +18,13 @@ import {
   setProducts,
   toggleToastMessage,
 } from "../../store/actions";
-import { RootState } from "../../store/interfaces";
-import { IProduct } from "../../../../src/modules/products/interface";
+import {IProduct, RootState} from "../../store/interfaces";
 import ProductCard from "./ProductCard";
 import ProductModal from "./ProductModal"; // Adjust this import based on your project structure
 import { Create } from "@mui/icons-material";
+import Spinner from "../../components/Spinner";
+import Paper from "@mui/material/Paper";
+import Grid from "@mui/material/Grid";
 
 interface ProductPageProps {
   products: IProduct[];
@@ -101,7 +98,7 @@ const ProductPage: React.FC<ProductPageProps> = (props: ProductPageProps) => {
   return (
     <>
       {isLoading ? (
-        <CircularProgress />
+        <Spinner />
       ) : (
         <>
           <div
@@ -119,14 +116,22 @@ const ProductPage: React.FC<ProductPageProps> = (props: ProductPageProps) => {
               <Create />
             </Button>
           </div>
-          {props.products.map((product) => (
-            <ProductCard
-              key={product.title}
-              onEditClick={() => handleCardClick(product)}
-              onDeleteClick={() => null}
-              product={product}
-            />
-          ))}
+          {props.products.length === 0 ? (
+            <Grid item xs={12}>
+              <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+                <h3>No products or services have been created yet.</h3>
+              </Paper>
+            </Grid>
+          ) : (
+            props.products.map((product) => (
+              <ProductCard
+                key={product.title}
+                onEditClick={() => handleCardClick(product)}
+                onDeleteClick={() => null}
+                product={product}
+              />
+            ))
+          )}
         </>
       )}
 
@@ -231,5 +236,5 @@ const mapStateToProps = (state: RootState) => ({
 });
 
 export default connect(mapStateToProps, { setProducts, toggleToastMessage })(
-  ProductPage
+  ProductPage,
 );

@@ -1,7 +1,3 @@
-// reducers
-import { IStepsTypes } from "../../../src/modules/cms/interface";
-import { IThemeColors, IThemeLogo } from "../../../src/modules/theme/interface";
-
 export interface IProduct {
   available: boolean;
   clientId: string;
@@ -62,12 +58,12 @@ export interface CompanyState {
   // Define the type for company state
 }
 export interface WebsiteSettingsState {
-  cms: IStepsTypes[];
-  possibleCmsComponents: IStepsTypes[];
-  theme: {
-    colors: IThemeColors;
-    logos: IThemeLogo;
-  };
+  // cms: IStepsTypes[];
+  // possibleCmsComponents: IStepsTypes[];
+  // theme: {
+  //   colors: IThemeColors;
+  //   logos: IThemeLogo;
+  // };
 }
 
 export interface IUIState {
