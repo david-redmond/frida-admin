@@ -30,6 +30,8 @@ export type AssociatedCompanies = Array<ICompany>;
 
 export interface INewCompany {
   name: string;
+  published: boolean;
+  promoted: boolean;
   address: {
     addressLine1: string;
     addressLine2: string;

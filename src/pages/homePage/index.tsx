@@ -6,11 +6,14 @@ import Deposits from "../../components/Deposits";
 import Orders from "../../components/Orders";
 import { connect, useDispatch } from "react-redux";
 import { setPageTitle } from "../../store/actions";
-import { RootState } from "../../store/interfaces";
+import { ICompany, RootState } from "../../store/interfaces";
 import CreateCompany from "../CreateCompany";
+import SignUpSteps from './SignUpSteps';
 
 interface IMapsState {
   hasAssociatedCompanies: boolean;
+  isPublished: boolean;
+  missingProducts: boolean;
 }
 
 interface IProps extends IMapsState {}
@@ -27,6 +30,14 @@ function _HomePage(props: IProps) {
 
   if (!props.hasAssociatedCompanies) {
     return <CreateCompany />;
+  }
+
+  if (!props.isPublished) {
+    return (
+      <Grid container spacing={3}>
+        <SignUpSteps />
+      </Grid>
+    );
   }
 
   return (
@@ -69,6 +80,11 @@ function _HomePage(props: IProps) {
 
 const mapState = (state: RootState): IMapsState => ({
   hasAssociatedCompanies: state.associatedCompanies.length > 0,
+  isPublished:
+    state.associatedCompanies.filter(
+      (company: ICompany) => company.id === state.user.activeCompanyId,
+    )[0].published || false,
+  missingProducts: state.products.length === 0,
 });
 
 export default connect(mapState)(_HomePage);
