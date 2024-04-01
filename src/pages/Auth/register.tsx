@@ -131,3 +131,4 @@ export default function SignUp(props: any) {
     </Container>
   );
 }
+//todo: add validation & error toasts
