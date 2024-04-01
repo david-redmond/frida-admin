@@ -1,13 +1,16 @@
-export interface IProduct {
-  available: boolean;
-  clientId: string;
+export interface INewProduct {
+  title: string;
   description: string;
+  price: number;
+  duration: string | null;
+  available: boolean;
+}
+export interface IProduct extends INewProduct {
+  clientId: string;
   duration: string | null;
   image: string;
-  price: number;
   productId: string;
   quantity?: number;
-  title: string;
 }
 export interface UserState {
   isLoggedIn: boolean;

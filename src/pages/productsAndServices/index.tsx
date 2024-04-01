@@ -12,57 +12,52 @@ import {
   Select,
   MenuItem,
 } from "@mui/material";
-import http from "../../http";
 import {
   setPageTitle,
   setProducts,
   toggleToastMessage,
 } from "../../store/actions";
-import {IProduct, RootState} from "../../store/interfaces";
+import {INewProduct, IProduct, RootState} from "../../store/interfaces";
 import ProductCard from "./ProductCard";
 import ProductModal from "./ProductModal"; // Adjust this import based on your project structure
 import { Create } from "@mui/icons-material";
 import Spinner from "../../components/Spinner";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
+import fetchProducts from "../../api/fetchProducts";
+import createNewProduct from "../../api/createNewProduct";
 
 interface ProductPageProps {
   products: IProduct[];
-  setProducts: any;
   activeCompanyId: string;
   toggleToastMessage: any;
 }
 
 const ProductPage: React.FC<ProductPageProps> = (props: ProductPageProps) => {
+  const dispatch = useDispatch();
   const [selectedProduct, setSelectedProduct] = useState<IProduct | null>(null);
   const [isEditing, setIsEditing] = useState(false);
   const [isLoading, setIsLoading] = useState<boolean>(true);
   const [isCreating, setIsCreating] = useState<boolean>(false);
-  const [newProductDetails, setNewProductDetails] = useState({
+  const [newProductDetails, setNewProductDetails] = useState<INewProduct>({
     title: "",
     description: "",
     price: 0,
-    duration: "",
+    duration: null,
     available: true,
   });
 
-  const fetchProducts = async () => {
-    const response = await http.get(`/api/products/${props.activeCompanyId}`);
-
-    if (!!response && !!response.data) {
-      props.setProducts(response.data);
-    }
+  const getProducts = async () => {
+    await fetchProducts(props.activeCompanyId, dispatch);
     setIsLoading(false);
   };
-
-  const dispatch = useDispatch();
 
   useEffect(() => {
     dispatch(setPageTitle("Product Settings"));
   }, [dispatch]);
 
   useEffect(() => {
-    fetchProducts();
+    getProducts();
   }, [props.activeCompanyId]);
 
   const handleCardClick = (product: IProduct) => {
@@ -87,12 +82,14 @@ const ProductPage: React.FC<ProductPageProps> = (props: ProductPageProps) => {
     });
   };
 
-  const handleCreateProduct = () => {
-    // Add logic to handle the creation of a new product
-    // You may dispatch an action, update state, or make an API call
-    // After creating, close the modal
-    // Ensure you validate the input details before proceeding
-    handleClose();
+  const handleCreateProduct = async () => {
+    await createNewProduct(
+      newProductDetails,
+      props.activeCompanyId,
+      dispatch,
+      handleClose,
+    );
+    await fetchProducts(props.activeCompanyId, dispatch);
   };
 
   return (
