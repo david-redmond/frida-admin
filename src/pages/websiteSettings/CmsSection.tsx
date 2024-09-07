@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, {useEffect, useState} from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import {
@@ -28,13 +28,22 @@ interface IState {
 
 const ComponentOrdering: React.FC<IProps> = (props) => {
   const [state, setState] = useState<IState>({
-    components: [...props.cmsContent],
+    components: props.cmsContent,
     newComponent: "",
     availableComponents: props.possibleCmsComponents.filter(
       (component) => !props.cmsContent.includes(component),
     ),
     isSaving: false,
   });
+
+  useEffect(() => setState({
+    ...state,
+    components: props.cmsContent,
+    availableComponents: props.possibleCmsComponents.filter(
+        (component) => !props.cmsContent.includes(component),
+    )
+  }),
+      [props.cmsContent])
 
   const moveComponent = (fromIndex: number, toIndex: number) => {
     const updatedComponents = [...state.components];

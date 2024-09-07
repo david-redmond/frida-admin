@@ -29,7 +29,7 @@ const WebsiteSettings = ({
     dispatch(setPageTitle("Website Setting & Configuration"));
   });
   const fetchData = async () => {
-    await fetchWebsiteSettings(activeCompanyId, setWebsiteSettings);
+    await fetchWebsiteSettings(activeCompanyId, dispatch);
     setIsLoading(false);
   };
 

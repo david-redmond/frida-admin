@@ -150,7 +150,7 @@ const ProfilePage: React.FC<any> = ({
                   </Button>
                   <List>
                     {associatedCompanies.map((company: ICompany) => (
-                      <ListItem key={company.id}>
+                      <ListItem key={company.id} >
                         <ListItemText primary={company.name} />
                         <ListItemSecondaryAction>
                           <IconButton
@@ -182,7 +182,7 @@ const ProfilePage: React.FC<any> = ({
               </Typography>
               {/* Company Cards */}
               {associatedCompanies.map((company: ICompany) => (
-                <Card key={company.id} sx={{ marginBottom: 2, px: 4, py: 2 }}>
+                <Card key={company.id} sx={{ marginBottom: 2, px: 4, py: 2 }} style={{backgroundColor: company.published ? "inherit" : "red"}}>
                   <CardContent>
                     <Typography variant="h4">{company.name}</Typography>
                     <div style={{ display: "flex" }}>
@@ -235,6 +235,7 @@ const ProfilePage: React.FC<any> = ({
                         {company.clientPublicId}{" "}
                       </a>
                     </Typography>
+                    <Typography variant="h5">{company.published ? "Published" : "Not Published"}</Typography>
                   </CardContent>
                   <CardActions
                     sx={{ justifyContent: "right", marginTop: "-50px" }}

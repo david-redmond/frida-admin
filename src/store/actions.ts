@@ -12,8 +12,7 @@ import {
   SET_USER_LOGGED_IN,
   SET_USER_LOGGED_OUT
 } from "./constants";
-import {IProduct, IToggleToastMessage} from "./interfaces";
-import { IOrder } from "../../../src/modules/orders/interface";
+import {IOrder, IProduct, IToggleToastMessage} from "./interfaces";
 
 export const setUserDetails = (user: any) => {
   return {
@@ -63,23 +62,9 @@ export const setWebsiteSettings = (responseData: any) => {
       type: SET_CMS_AND_THEME,
       landingContent: [...responseData.landingContent],
       checkoutContent: [...responseData.checkoutContent],
-      theme: {
-        colors: {
-          primaryLight: "",
-          primary: "",
-          primaryDark: "",
-          secondaryLight: "",
-          secondary: "",
-          secondaryDark: "",
-          secondaryText: "",
-          primaryText: "",
-          // ...responseData,
-        },
-        logos: {
-          alt: "",
-          src: "",
-          // ...responseData,
-        },
+      theme:  {
+        colors: responseData.colors,
+        logos: responseData.logo,
       },
     };
     return finalData;
