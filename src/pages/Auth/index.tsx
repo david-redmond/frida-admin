@@ -11,6 +11,7 @@ import Box from "@mui/material/Box";
 import Grid from "@mui/material/Grid";
 import LockOutlinedIcon from "@mui/icons-material/LockOutlined";
 import Typography from "@mui/material/Typography";
+import Alert from "@mui/material/Alert"; // Import Alert for error messages
 import { httpAuth } from "../../http";
 import Copyright from "../../components/Copyright";
 import Routes from "../../routes";
@@ -21,18 +22,46 @@ interface ICredentials {
 }
 
 async function loginUser(credentials: ICredentials) {
-  const response = await httpAuth.post("/login", credentials);
-  return response.data;
+  try {
+    const response = await httpAuth.post("/login", credentials);
+    return response.data;
+  } catch (error: any) {
+    if (error.response && error.response.status === 400) {
+      throw new Error("Invalid email or password");
+    } else {
+      throw new Error("Something went wrong. Please try again.");
+    }
+  }
 }
+
 export default function SignInSide(props: any) {
+  const [emailError, setEmailError] = React.useState(false);
+  const [passwordError, setPasswordError] = React.useState(false);
+  const [errorMessage, setErrorMessage] = React.useState<string | null>(null);
+
   const handleSubmit = async (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
+    setErrorMessage(null); // Reset error message
     const data = new FormData(event.currentTarget);
-    const token = await loginUser({
-      email: data.get("email"),
-      password: data.get("password"),
-    });
-    props.setToken(token);
+
+    const email = data.get("email");
+    const password = data.get("password");
+
+    // Simple validation
+    setEmailError(!email);
+    setPasswordError(!password);
+
+    if (!email || !password) {
+      setErrorMessage("Please fill out both fields.");
+      return;
+    }
+
+    try {
+      const token = await loginUser({ email, password });
+      props.setToken(token);
+    } catch (error: any) {
+      setErrorMessage(error.message);
+    }
   };
 
   return (
@@ -79,6 +108,11 @@ export default function SignInSide(props: any) {
             onSubmit={handleSubmit}
             sx={{ mt: 1 }}
           >
+            {errorMessage && (
+              <Alert severity="error" sx={{ mb: 2 }}>
+                {errorMessage}
+              </Alert>
+            )}
             <TextField
               margin="normal"
               required
@@ -88,6 +122,8 @@ export default function SignInSide(props: any) {
               name="email"
               autoComplete="email"
               autoFocus
+              error={emailError}
+              helperText={emailError ? "Email is required" : ""}
             />
             <TextField
               margin="normal"
@@ -98,6 +134,8 @@ export default function SignInSide(props: any) {
               type="password"
               id="password"
               autoComplete="current-password"
+              error={passwordError}
+              helperText={passwordError ? "Password is required" : ""}
             />
             <FormControlLabel
               control={<Checkbox value="remember" color="primary" />}
@@ -112,11 +150,6 @@ export default function SignInSide(props: any) {
               Sign In
             </Button>
             <Grid container>
-              {/*<Grid item xs>*/}
-              {/*  <Link href={Routes.resetPassword}  variant="body2">*/}
-              {/*    Forgot password?*/}
-              {/*  </Link>*/}
-              {/*</Grid>*/}
               <Grid item>
                 <Link href={Routes.register} variant="body2">
                   {"Don't have an account? Sign Up"}
@@ -130,4 +163,3 @@ export default function SignInSide(props: any) {
     </Grid>
   );
 }
-//todo: add validation & error toasts

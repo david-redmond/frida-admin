@@ -114,9 +114,9 @@ export const websiteSettingsReducer = (
     case SET_CMS_AND_THEME: {
       return {
         ...state,
-        landingContent: action.payload.landingContent,
-        checkoutContent: action.payload.checkoutContent,
-        theme: action.payload.theme
+        landingContent: [...action.landingContent],
+        checkoutContent: [...action.checkoutContent],
+        theme: { ...action.theme },
       };
     }
     case SET_ACTIVE_COMPANY_ID: {

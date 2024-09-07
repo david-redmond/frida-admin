@@ -65,7 +65,7 @@ function App() {
       dispatch(setUserDetails(response.data));
       dispatch(setUserLoggedIn());
       const { attributes = {} } = response.data;
-      const associatedClients = attributes?.companies || [];
+      const associatedClients = attributes?.associatedClients || [];
       const allClients: any[] = [];
 
       const activeCompanyId = associatedClients[0];

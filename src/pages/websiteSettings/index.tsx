@@ -2,20 +2,26 @@ import React, { useState } from "react";
 import { RootState } from "../../store/interfaces";
 import { connect, useDispatch } from "react-redux";
 import CmsSection from "./CmsSection";
-import { setPageTitle } from "../../store/actions";
+import { setPageTitle, setWebsiteSettings } from "../../store/actions";
 import Accordian from "../../components/Accordian";
 import ImagesSection from "./ImagesSection";
 import ThemeSection from "./ThemeSection";
 import Spinner from "../../components/Spinner";
 import fetchWebsiteSettings from "../../api/fetchWebsiteSettings";
 
-interface WebsiteSettingsProps extends IMapState {}
+interface WebsiteSettingsProps extends IMapState, IActions {}
 
 interface IMapState {
   activeCompanyId: string;
 }
+interface IActions {
+  setWebsiteSettings: any;
+}
 
-const WebsiteSettings = ({ activeCompanyId }: WebsiteSettingsProps) => {
+const WebsiteSettings = ({
+  activeCompanyId,
+  setWebsiteSettings,
+}: WebsiteSettingsProps) => {
   const dispatch = useDispatch();
   const [isLoading, setIsLoading] = useState<boolean>(true);
 
@@ -23,7 +29,7 @@ const WebsiteSettings = ({ activeCompanyId }: WebsiteSettingsProps) => {
     dispatch(setPageTitle("Website Setting & Configuration"));
   });
   const fetchData = async () => {
-    await fetchWebsiteSettings(activeCompanyId, dispatch);
+    await fetchWebsiteSettings(activeCompanyId, setWebsiteSettings);
     setIsLoading(false);
   };
 
@@ -67,4 +73,4 @@ const WebsiteSettings = ({ activeCompanyId }: WebsiteSettingsProps) => {
 const mapState = (state: RootState): IMapState => ({
   activeCompanyId: state.user.activeCompanyId,
 });
-export default connect(mapState)(WebsiteSettings);
+export default connect(mapState, { setWebsiteSettings })(WebsiteSettings);

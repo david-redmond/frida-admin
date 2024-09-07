@@ -25,3 +25,7 @@ code {
   font-size: 1.8rem!important;
   color: white;
 }
+
+.MuiStepIcon-root.MuiStepIcon-active {
+  color: #317e1e !important;
+}

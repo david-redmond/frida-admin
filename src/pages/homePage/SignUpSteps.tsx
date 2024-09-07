@@ -7,6 +7,7 @@ import fetchProducts from "../../api/fetchProducts";
 import { connect, useDispatch } from "react-redux";
 import Spinner from "../../components/Spinner";
 import { RootState } from "../../store/interfaces";
+import fetchWebsiteSettings from "../../api/fetchWebsiteSettings";
 
 const useStyles = makeStyles((theme) => ({
   root: {
@@ -71,25 +72,24 @@ interface IProps extends IMapState {}
 
 const VerticalStepper = (props: IProps) => {
   const classes = useStyles();
-  const [activeStep, setActiveStep] = React.useState<number>(2);
+  const [activeStep, setActiveStep] = React.useState<number>(
+    props.startingStep,
+  );
   const [isLoading, setIsLoading] = React.useState<boolean>(true);
   const dispatch = useDispatch();
   const fetchData = async () => {
     await fetchProducts(props.activeCompanyId, dispatch);
-    let theNumber: number = 2;
-    if (props.hasProducts) {
-      theNumber = 3;
-    }
-    if (props.hasWebsiteSettings) {
-      theNumber = 4;
-    }
-    setActiveStep(theNumber);
+    await fetchWebsiteSettings(props.activeCompanyId, dispatch);
     setIsLoading(false);
   };
 
   useEffect(() => {
     fetchData();
   }, []);
+
+  useEffect(() => {
+    setActiveStep(props.startingStep);
+  }, [props.startingStep]);
 
   const handleClick = () => {
     if (activeStep === 2) {
@@ -132,14 +132,23 @@ const VerticalStepper = (props: IProps) => {
 
 interface IMapState {
   activeCompanyId: string;
-  hasProducts: boolean;
-  hasWebsiteSettings: boolean;
+  startingStep: number;
 }
-const mapState = (state: RootState): IMapState => ({
-  activeCompanyId: state.user.activeCompanyId,
-  hasProducts: state.products.length > 0,
-  //todo: remove this soon
-  hasWebsiteSettings: !false,
-});
+const mapState = (state: RootState): IMapState => {
+  let theNumber: number = 2;
+  if (state.products.length > 0) {
+    theNumber = 3;
+  }
+  if (
+    state.websiteSettings.checkoutContent.length > 0 ||
+    state.websiteSettings.landingContent.length > 0
+  ) {
+    theNumber = 4;
+  }
+  return {
+    activeCompanyId: state.user.activeCompanyId,
+    startingStep: theNumber,
+  };
+};
 
 export default connect(mapState)(VerticalStepper);

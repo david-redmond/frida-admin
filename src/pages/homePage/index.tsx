@@ -78,13 +78,15 @@ function _HomePage(props: IProps) {
   );
 }
 
-const mapState = (state: RootState): IMapsState => ({
-  hasAssociatedCompanies: state.associatedCompanies.length > 0,
-  isPublished:
-    state.associatedCompanies.filter(
-      (company: ICompany) => company.id === state.user.activeCompanyId,
-    )[0].published || false,
-  missingProducts: state.products.length === 0,
-});
+const mapState = (state: RootState): IMapsState => {
+  const company = state.associatedCompanies.filter(
+    (company: ICompany) => company.id === state.user.activeCompanyId,
+  )[0];
+  return {
+    hasAssociatedCompanies: state.associatedCompanies.length > 0,
+    isPublished: !!company && !!company.published,
+    missingProducts: state.products.length === 0,
+  };
+};
 
 export default connect(mapState)(_HomePage);

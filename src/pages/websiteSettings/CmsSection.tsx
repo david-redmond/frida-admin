@@ -19,7 +19,6 @@ import { toggleToastMessage } from "../../store/actions";
 import { IToggleToastMessage } from "../../store/interfaces";
 import CmsComponentItem from "./CmsComponentItem";
 
-
 interface IState {
   components: string[];
   newComponent: string;
@@ -32,7 +31,7 @@ const ComponentOrdering: React.FC<IProps> = (props) => {
     components: [...props.cmsContent],
     newComponent: "",
     availableComponents: props.possibleCmsComponents.filter(
-      (component) => !props.cmsContent.includes(component)
+      (component) => !props.cmsContent.includes(component),
     ),
     isSaving: false,
   });
@@ -61,7 +60,7 @@ const ComponentOrdering: React.FC<IProps> = (props) => {
         ...prevState,
         components: [...components, newComponent],
         availableComponents: availableComponents.filter(
-          (component) => component !== newComponent
+          (component) => component !== newComponent,
         ),
         newComponent: "",
       }));
@@ -73,14 +72,21 @@ const ComponentOrdering: React.FC<IProps> = (props) => {
       return;
     }
 
-    const data = {
-      cmsContent: state.components,
-    };
+    let data: any = {};
+
+    if (props.type === "landingPage") {
+      data.landingContent = state.components;
+    } else if (props.type === "checkout") {
+      data.checkoutContent = state.components;
+    }
 
     setState((prevState) => ({ ...prevState, isSaving: true }));
 
     try {
-      const response = await http.post(`/api/cms/${props.activeCompanyId}`, data);
+      const response = await http.put(
+        `/api/cms/${props.activeCompanyId}`,
+        data,
+      );
 
       if (response.status >= 200 && response.status <= 299) {
         props.toggleToastMessage({
@@ -152,11 +158,11 @@ const ComponentOrdering: React.FC<IProps> = (props) => {
           </Grid>
         </Grid>
         <Button
-            variant="contained"
-            onClick={saveToDatabase}
-            style={{
-              marginTop: '20px'
-            }}
+          variant="contained"
+          onClick={saveToDatabase}
+          style={{
+            marginTop: "20px",
+          }}
         >
           Save changes
         </Button>
@@ -165,11 +171,18 @@ const ComponentOrdering: React.FC<IProps> = (props) => {
   );
 };
 
-const mapState = (state: RootState): IMapsState => {
-  return {
-    cmsContent: state.websiteSettings.cms,
-    possibleCmsComponents: state.websiteSettings.possibleCmsComponents,
-  };
+const mapState = (state: RootState, ownProps: OwnProps): IMapsState => {
+  if (ownProps.type === "landingPage") {
+    return {
+      cmsContent: state.websiteSettings.landingContent,
+      possibleCmsComponents: state.websiteSettings.allowedLandingComponents,
+    };
+  } else {
+    return {
+      cmsContent: state.websiteSettings.checkoutContent,
+      possibleCmsComponents: state.websiteSettings.allowedCheckoutComponents,
+    };
+  }
 };
 
 export default connect(mapState, { toggleToastMessage })(ComponentOrdering);
@@ -183,6 +196,9 @@ interface IActions {
   toggleToastMessage: (payload: IToggleToastMessage) => void;
 }
 
-interface IProps extends IMapsState, IActions {
+interface IProps extends IMapsState, IActions, OwnProps {}
+
+interface OwnProps {
   activeCompanyId: string;
+  type: "landingPage" | "checkout";
 }

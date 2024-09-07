@@ -25,7 +25,7 @@ export interface IUser {
   email: string;
   image?: string;
   attributes: {
-    companies?: string[];
+    associatedClients?: string[];
   };
 }
 
@@ -57,6 +57,7 @@ export type IUserPositionType = "owner" | "admin" | "standard";
 export interface ICompany extends INewCompany {
   id: string;
   clientPublicId: string;
+  published: boolean;
 }
 
 export interface CompanyState {

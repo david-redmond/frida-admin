@@ -17,9 +17,10 @@ import {
   CardActions,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { ICompany, IUser, RootState } from "../../store/interfaces";
 import { Delete, Edit } from "@mui/icons-material";
+import connectCompanyToUser from "../../api/connectCompanyToUser";
 
 // Dummy functions for addCompany and removeCompany
 const addCompany = (company: any) => null;
@@ -46,7 +47,10 @@ const ProfilePage: React.FC<any> = ({
   hasAssociatedCompanies,
 }: IProps) => {
   const [companyRequest, setCompanyRequest] = useState("");
-  const [newCompany, setNewCompany] = useState("");
+  const [newCompanyName, setNewCompanyName] = useState("");
+  const [newCompanyId, setNewCompanyId] = useState("");
+  const dispatch = useDispatch();
+
   const handleRequestSubmit = () => {
     // Replace 'your-api-endpoint' with the actual endpoint to submit the request
     fetch("your-api-endpoint", {
@@ -67,15 +71,6 @@ const ProfilePage: React.FC<any> = ({
       .catch((error) => {
         console.error("Error submitting request:", error);
       });
-  };
-
-  const handleNewCompanySubmit = () => {
-    // Assuming the associatedCompanies is an array of company objects
-    addCompany({
-      companyId: newCompany,
-      // Add other relevant company details here
-    });
-    setNewCompany("");
   };
 
   return (
@@ -117,17 +112,38 @@ const ProfilePage: React.FC<any> = ({
                     Associated Companies
                   </Typography>
                   <TextField
-                    label="New Company ID"
+                    label="Company Name"
                     variant="outlined"
                     fullWidth
-                    value={newCompany}
-                    onChange={(e) => setNewCompany(e.target.value)}
+                    value={newCompanyName}
+                    onChange={(e) => setNewCompanyName(e.target.value)}
                     sx={{ marginBottom: 2 }}
                   />
+                  <TextField
+                    label="Company ID"
+                    variant="outlined"
+                    fullWidth
+                    value={newCompanyId}
+                    onChange={(e) => setNewCompanyId(e.target.value)}
+                    sx={{ marginBottom: 2 }}
+                  />
+                  <Typography
+                    variant="body2"
+                    gutterBottom
+                    sx={{ marginBottom: 2 }}
+                  >
+                    *Ask the admin for these details.
+                  </Typography>
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={handleNewCompanySubmit}
+                    onClick={() =>
+                      connectCompanyToUser({
+                        companyName: newCompanyName,
+                        companyId: newCompanyId,
+                        dispatch,
+                      })
+                    }
                     sx={{ marginBottom: 2 }}
                   >
                     Add Company
@@ -164,75 +180,75 @@ const ProfilePage: React.FC<any> = ({
               <Typography variant="h6" gutterBottom>
                 Associated Companies
               </Typography>
-                {/* Company Cards */}
-                {associatedCompanies.map((company: ICompany) => (
-                  <Card key={company.id} sx={{ marginBottom: 2, px: 4, py: 2 }}>
-                    <CardContent>
-                      <Typography variant="h4">{company.name}</Typography>
-                      <div style={{ display: "flex" }}>
-                        <CardContent
-                          style={{ display: "flex", flexDirection: "column" }}
-                        >
-                          <Typography variant="caption">
-                            Admin: {company.contact.person}
-                          </Typography>
-                          <Typography variant="caption">
-                            Email: {company.contact.email}
-                          </Typography>
-                          <Typography variant="caption">
-                            Phone: {company.contact.phone}
-                          </Typography>
-                          <Typography variant="caption">
-                            Website: {company.contact.website}
-                          </Typography>
-                        </CardContent>
-                        <CardContent
-                          style={{ display: "flex", flexDirection: "column" }}
-                        >
-                          <Typography variant="caption">Address</Typography>
-                          <Typography variant="caption">
-                            {company.address.addressLine1}
-                          </Typography>
-                          <Typography variant="caption">
-                            {company.address.addressLine2}
-                          </Typography>
-                          <Typography variant="caption">
-                            {company.address.city}
-                          </Typography>
-                          <Typography variant="caption">
-                            {company.address.state}
-                          </Typography>
-                          <Typography variant="caption">
-                            {company.address.zipcode}
-                          </Typography>
-                          <Typography variant="caption">
-                            {company.address.country}
-                          </Typography>
-                        </CardContent>
-                      </div>
-                      <Typography variant="body2">
-                        Website subdomain:{" "}
-                        <a
-                          href={`http://${company.clientPublicId}.project-frida.online`}
-                          target="_blank"
-                        >
-                          {company.clientPublicId}{" "}
-                        </a>
-                      </Typography>
-                    </CardContent>
-                    <CardActions
-                      sx={{ justifyContent: "right", marginTop: "-50px" }}
-                    >
-                      <IconButton
-                        edge="end"
-                        aria-label="edit"
-                        onClick={() => null}
+              {/* Company Cards */}
+              {associatedCompanies.map((company: ICompany) => (
+                <Card key={company.id} sx={{ marginBottom: 2, px: 4, py: 2 }}>
+                  <CardContent>
+                    <Typography variant="h4">{company.name}</Typography>
+                    <div style={{ display: "flex" }}>
+                      <CardContent
+                        style={{ display: "flex", flexDirection: "column" }}
                       >
-                        <Edit />
-                      </IconButton>
-                    </CardActions>
-                  </Card>
-                ))}
+                        <Typography variant="caption">
+                          Admin: {company.contact.person}
+                        </Typography>
+                        <Typography variant="caption">
+                          Email: {company.contact.email}
+                        </Typography>
+                        <Typography variant="caption">
+                          Phone: {company.contact.phone}
+                        </Typography>
+                        <Typography variant="caption">
+                          Website: {company.contact.website}
+                        </Typography>
+                      </CardContent>
+                      <CardContent
+                        style={{ display: "flex", flexDirection: "column" }}
+                      >
+                        <Typography variant="caption">Address</Typography>
+                        <Typography variant="caption">
+                          {company.address.addressLine1}
+                        </Typography>
+                        <Typography variant="caption">
+                          {company.address.addressLine2}
+                        </Typography>
+                        <Typography variant="caption">
+                          {company.address.city}
+                        </Typography>
+                        <Typography variant="caption">
+                          {company.address.state}
+                        </Typography>
+                        <Typography variant="caption">
+                          {company.address.zipcode}
+                        </Typography>
+                        <Typography variant="caption">
+                          {company.address.country}
+                        </Typography>
+                      </CardContent>
+                    </div>
+                    <Typography variant="body2">
+                      Website subdomain:{" "}
+                      <a
+                        href={`http://${company.clientPublicId}.project-frida.online`}
+                        target="_blank"
+                      >
+                        {company.clientPublicId}{" "}
+                      </a>
+                    </Typography>
+                  </CardContent>
+                  <CardActions
+                    sx={{ justifyContent: "right", marginTop: "-50px" }}
+                  >
+                    <IconButton
+                      edge="end"
+                      aria-label="edit"
+                      onClick={() => null}
+                    >
+                      <Edit />
+                    </IconButton>
+                  </CardActions>
+                </Card>
+              ))}
             </Paper>
           </Grid>
         )}

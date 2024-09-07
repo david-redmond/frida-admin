@@ -58,30 +58,31 @@ export const setCompanyDetails = (company: any) => {
   };
 };
 
-export const setCMS = (responseData: any) => {
-  return {
-    type: SET_CMS_AND_THEME,
-    landingContent: [],
-    checkoutContent: [],
-    theme: {
-      colors: {
-        primaryLight: "",
-        primary: "",
-        primaryDark: "",
-        secondaryLight: "",
-        secondary: "",
-        secondaryDark: "",
-        secondaryText: "",
-        primaryText: "",
-        ...responseData,
+export const setWebsiteSettings = (responseData: any) => {
+    const finalData = {
+      type: SET_CMS_AND_THEME,
+      landingContent: [...responseData.landingContent],
+      checkoutContent: [...responseData.checkoutContent],
+      theme: {
+        colors: {
+          primaryLight: "",
+          primary: "",
+          primaryDark: "",
+          secondaryLight: "",
+          secondary: "",
+          secondaryDark: "",
+          secondaryText: "",
+          primaryText: "",
+          // ...responseData,
+        },
+        logos: {
+          alt: "",
+          src: "",
+          // ...responseData,
+        },
       },
-      logos: {
-        alt: "",
-        src: "",
-        ...responseData,
-      },
-    },
-  };
+    };
+    return finalData;
 };
 
 export const setPageTitle = (payload: string) => {

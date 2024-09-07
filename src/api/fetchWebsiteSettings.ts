@@ -1,20 +1,21 @@
 import http from "../http";
-import { setCMS } from "../store/actions";
 
 let isFetching: boolean = false;
-export default async (activeCompanyId: string, dispatch: any) => {
+export default async (activeCompanyId: string, setter: any) => {
   try {
     if (isFetching) {
       return;
     }
     isFetching = true;
     const response = await http.get(`/api/cms/${activeCompanyId}`);
-
+    console.log("$$$$$$$$$$$$$")
+    console.log(response)
+    console.log("$$$$$$$$$$$$$")
     if (response.status >= 200 && response.status <= 299) {
-      dispatch(setCMS(response.data));
+      setter(response.data);
     }
   } catch (e: any) {
-    console.error("Error: fetchProducts", e);
+    console.error("Error: fetchCMS & Theme", e);
   } finally {
     isFetching = false;
   }
