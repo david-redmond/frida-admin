@@ -36,14 +36,17 @@ const ComponentOrdering: React.FC<IProps> = (props) => {
     isSaving: false,
   });
 
-  useEffect(() => setState({
-    ...state,
-    components: props.cmsContent,
-    availableComponents: props.possibleCmsComponents.filter(
-        (component) => !props.cmsContent.includes(component),
-    )
-  }),
-      [props.cmsContent])
+  useEffect(
+    () =>
+      setState({
+        ...state,
+        components: props.cmsContent,
+        availableComponents: props.possibleCmsComponents.filter(
+          (component) => !props.cmsContent.includes(component),
+        ),
+      }),
+    [props.cmsContent],
+  );
 
   const moveComponent = (fromIndex: number, toIndex: number) => {
     const updatedComponents = [...state.components];
@@ -120,6 +123,9 @@ const ComponentOrdering: React.FC<IProps> = (props) => {
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
             {state.components.map((_component, index) => {
+              if (!CMS_SECTIONS[_component]) {
+                return <p>{_component}</p>;
+              }
               const { id, name, description } = CMS_SECTIONS[_component];
               return (
                 <CmsComponentItem
@@ -149,11 +155,17 @@ const ComponentOrdering: React.FC<IProps> = (props) => {
                   }
                 >
                   <MenuItem value="">Select a component</MenuItem>
-                  {state.availableComponents.map((component) => (
-                    <MenuItem key={component} value={component}>
-                      {CMS_SECTIONS[component]?.name}
-                    </MenuItem>
-                  ))}
+                  {state.availableComponents.map((component) => {
+                    if (!CMS_SECTIONS[component].name) {
+                      return <p>Unknown component</p>;
+                    } else {
+                      return (
+                        <MenuItem key={component} value={component}>
+                          {CMS_SECTIONS[component]?.name}
+                        </MenuItem>
+                      );
+                    }
+                  })}
                 </Select>
               </FormControl>
               <Button

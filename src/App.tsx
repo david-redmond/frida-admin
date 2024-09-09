@@ -39,10 +39,6 @@ function App() {
   if (!token) {
     return (
       <div style={{ position: "relative" }}>
-        <Helmet>
-          <meta charSet="utf-8" />
-          <title>{`Project Frida | Admin Panel`}</title>
-        </Helmet>
         <Routes>
           <Route
             path={AppRoutes.register}

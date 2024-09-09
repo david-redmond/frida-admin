@@ -66,7 +66,7 @@ export interface CompanyState {
 
 export type ILandingStepsTypes = "PRODUCTS_STEP" | "TIMESLOTS_STEP";
 
-export type ICheckoutStepsTypes = "SHIPPING_ADDRESS" | "CUSTOMER_DETAILS";
+export type ICheckoutStepsTypes = "Contact_Details" | "Shipping_address" | "Review_your_order"; // | "Payment_details";
 
 export interface IThemeColors {
   primaryLight: string;

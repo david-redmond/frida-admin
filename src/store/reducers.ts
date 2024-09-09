@@ -88,7 +88,7 @@ const InitialWebsiteSettingsState: WebsiteSettingsState = {
   landingContent: [],
   checkoutContent: [],
   allowedLandingComponents: ["PRODUCTS_STEP", "TIMESLOTS_STEP"],
-  allowedCheckoutComponents: ["CUSTOMER_DETAILS", "SHIPPING_ADDRESS"],
+  allowedCheckoutComponents: ["Contact_Details", "Shipping_address", "Review_your_order"],
   theme: {
     colors: {
       primaryLight: "",
