@@ -5,7 +5,6 @@ import AppRoutes from "./routes";
 import HomePage from "./pages/homePage";
 import ServicesPage from "./pages/productsAndServices";
 import OrdersPage from "./pages/orders";
-import { Helmet } from "react-helmet";
 import Login from "./pages/Auth";
 import Register from "./pages/Auth/register";
 import UseToken from "./hooks/useToken";

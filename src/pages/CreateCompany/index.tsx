@@ -7,6 +7,7 @@ import ExistingCompany from "./ExistingCompany";
 import CreateNewCompany from "./CreateNewCompany";
 import { IUser, RootState } from "../../store/interfaces";
 import { useSelector } from "react-redux";
+import {Helmet} from "react-helmet";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -52,6 +53,10 @@ export default function BasicTabs() {
 
   return (
     <Box sx={{ width: "100%" }}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{`Project Frida Admin | Create Company`}</title>
+      </Helmet>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
           value={value}

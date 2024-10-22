@@ -26,6 +26,7 @@ import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import fetchProducts from "../../api/fetchProducts";
 import createNewProduct from "../../api/createNewProduct";
+import {Helmet} from "react-helmet";
 
 interface ProductPageProps {
   products: IProduct[];
@@ -98,6 +99,10 @@ const ProductPage: React.FC<ProductPageProps> = (props: ProductPageProps) => {
         <Spinner />
       ) : (
         <>
+          <Helmet>
+            <meta charSet="utf-8" />
+            <title>{`Project Frida Admin | Products`}</title>
+          </Helmet>
           <div
             style={{
               marginBottom: "26px",

@@ -15,6 +15,7 @@ import Alert from "@mui/material/Alert"; // Import Alert for error messages
 import { httpAuth } from "../../http";
 import Copyright from "../../components/Copyright";
 import Routes from "../../routes";
+import {Helmet} from "react-helmet";
 
 interface ICredentials {
   email: FormDataEntryValue | null;
@@ -66,6 +67,10 @@ export default function SignInSide(props: any) {
 
   return (
     <Grid container component="main" sx={{ height: "100vh" }}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{`Project Frida Admin | Sign In`}</title>
+      </Helmet>
       <CssBaseline />
       <Grid
         item

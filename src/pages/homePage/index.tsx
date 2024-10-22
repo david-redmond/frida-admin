@@ -9,6 +9,7 @@ import { setPageTitle } from "../../store/actions";
 import { ICompany, RootState } from "../../store/interfaces";
 import CreateCompany from "../CreateCompany";
 import SignUpSteps from "./SignUpSteps";
+import {Helmet} from "react-helmet";
 
 interface IMapsState {
   hasAssociatedCompanies: boolean;
@@ -35,6 +36,10 @@ function _HomePage(props: IProps) {
   if (!props.isPublished) {
     return (
       <Grid container spacing={3}>
+          <Helmet>
+              <meta charSet="utf-8" />
+              <title>{`Project Frida Admin | Get Started`}</title>
+          </Helmet>
         <SignUpSteps />
       </Grid>
     );
@@ -42,6 +47,10 @@ function _HomePage(props: IProps) {
 
   return (
     <Grid container spacing={3}>
+        <Helmet>
+            <meta charSet="utf-8" />
+            <title>{`Project Frida Admin | Dashboard`}</title>
+        </Helmet>
       {/* Chart */}
       <Grid item xs={12} md={8} lg={9}>
         <Paper

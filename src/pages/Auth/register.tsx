@@ -13,6 +13,7 @@ import Alert from "@mui/material/Alert"; // Import Alert for error messages
 import { httpAuth } from "../../http";
 import Copyright from "../../components/Copyright";
 import Routes from "../../routes";
+import {Helmet} from "react-helmet";
 
 async function registerNewUser(credentials: any) {
   try {
@@ -79,6 +80,10 @@ export default function SignUp(props: any) {
 
   return (
       <Container component="main" maxWidth="xs">
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>{`Project Frida Admin | Register`}</title>
+        </Helmet>
         <CssBaseline />
         <Box
             sx={{

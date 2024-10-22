@@ -8,6 +8,7 @@ import ImagesSection from "./ImagesSection";
 import ThemeSection from "./ThemeSection";
 import Spinner from "../../components/Spinner";
 import fetchWebsiteSettings from "../../api/fetchWebsiteSettings";
+import {Helmet} from "react-helmet";
 
 interface WebsiteSettingsProps extends IMapState, IActions {}
 
@@ -43,6 +44,10 @@ const WebsiteSettings = ({
 
   return (
     <>
+        <Helmet>
+            <meta charSet="utf-8" />
+            <title>{`Project Frida Admin | Website Settings`}</title>
+        </Helmet>
       <Accordian
         title={"Landing Page Content"}
         desciption={

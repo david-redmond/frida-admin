@@ -21,6 +21,7 @@ import { connect, useDispatch } from "react-redux";
 import { ICompany, IUser, RootState } from "../../store/interfaces";
 import { Delete, Edit } from "@mui/icons-material";
 import connectCompanyToUser from "../../api/connectCompanyToUser";
+import {Helmet} from "react-helmet";
 
 // Dummy functions for addCompany and removeCompany
 const addCompany = (company: any) => null;
@@ -75,6 +76,10 @@ const ProfilePage: React.FC<any> = ({
 
   return (
     <ResponsiveContainer>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{`Project Frida Admin | Profile`}</title>
+      </Helmet>
       <Grid container spacing={3} justifyContent="center">
         <Grid item>
           <Paper
