@@ -6,11 +6,15 @@ import Deposits from "../../components/Deposits";
 import Orders from "../../components/Orders";
 import { connect, useDispatch } from "react-redux";
 import { setPageTitle } from "../../store/actions";
-import { RootState } from "../../store/interfaces";
+import { ICompany, RootState } from "../../store/interfaces";
 import CreateCompany from "../CreateCompany";
+import SignUpSteps from "./SignUpSteps";
+import {Helmet} from "react-helmet";
 
 interface IMapsState {
   hasAssociatedCompanies: boolean;
+  isPublished: boolean;
+  missingProducts: boolean;
 }
 
 interface IProps extends IMapsState {}
@@ -29,8 +33,24 @@ function _HomePage(props: IProps) {
     return <CreateCompany />;
   }
 
+  if (!props.isPublished) {
+    return (
+      <Grid container spacing={3}>
+          <Helmet>
+              <meta charSet="utf-8" />
+              <title>{`Project Frida Admin | Get Started`}</title>
+          </Helmet>
+        <SignUpSteps />
+      </Grid>
+    );
+  }
+
   return (
     <Grid container spacing={3}>
+        <Helmet>
+            <meta charSet="utf-8" />
+            <title>{`Project Frida Admin | Dashboard`}</title>
+        </Helmet>
       {/* Chart */}
       <Grid item xs={12} md={8} lg={9}>
         <Paper
@@ -67,8 +87,15 @@ function _HomePage(props: IProps) {
   );
 }
 
-const mapState = (state: RootState): IMapsState => ({
-  hasAssociatedCompanies: state.associatedCompanies.length > 0,
-});
+const mapState = (state: RootState): IMapsState => {
+  const company = state.associatedCompanies.filter(
+    (company: ICompany) => company.id === state.user.activeCompanyId,
+  )[0];
+  return {
+    hasAssociatedCompanies: state.associatedCompanies.length > 0,
+    isPublished: !!company && !!company.published,
+    missingProducts: state.products.length === 0,
+  };
+};
 
 export default connect(mapState)(_HomePage);

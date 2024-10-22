@@ -17,9 +17,11 @@ import {
   CardActions,
 } from "@mui/material";
 import { styled } from "@mui/system";
-import { connect } from "react-redux";
+import { connect, useDispatch } from "react-redux";
 import { ICompany, IUser, RootState } from "../../store/interfaces";
 import { Delete, Edit } from "@mui/icons-material";
+import connectCompanyToUser from "../../api/connectCompanyToUser";
+import {Helmet} from "react-helmet";
 
 // Dummy functions for addCompany and removeCompany
 const addCompany = (company: any) => null;
@@ -46,7 +48,10 @@ const ProfilePage: React.FC<any> = ({
   hasAssociatedCompanies,
 }: IProps) => {
   const [companyRequest, setCompanyRequest] = useState("");
-  const [newCompany, setNewCompany] = useState("");
+  const [newCompanyName, setNewCompanyName] = useState("");
+  const [newCompanyId, setNewCompanyId] = useState("");
+  const dispatch = useDispatch();
+
   const handleRequestSubmit = () => {
     // Replace 'your-api-endpoint' with the actual endpoint to submit the request
     fetch("your-api-endpoint", {
@@ -69,19 +74,14 @@ const ProfilePage: React.FC<any> = ({
       });
   };
 
-  const handleNewCompanySubmit = () => {
-    // Assuming the associatedCompanies is an array of company objects
-    addCompany({
-      companyId: newCompany,
-      // Add other relevant company details here
-    });
-    setNewCompany("");
-  };
-
   return (
     <ResponsiveContainer>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{`Project Frida Admin | Profile`}</title>
+      </Helmet>
       <Grid container spacing={3} justifyContent="center">
-        <Grid item xs={12} md={8}>
+        <Grid item>
           <Paper
             style={{ padding: "16px", boxShadow: "0 4px 8px rgba(0,0,0,0.1)" }}
           >
@@ -103,38 +103,59 @@ const ProfilePage: React.FC<any> = ({
                   <Typography variant="h5" mt={2}>
                     {!!user ? `${user.firstname} ${user.surname}` : "Guest"}
                   </Typography>
-                  <Typography variant="subtitle1" color="textSecondary">
-                    {!!user ? user.position : " "}
-                  </Typography>
+                  {/*<Typography variant="subtitle1" color="textSecondary">*/}
+                  {/*  {!!user ? user.position : " "}*/}
+                  {/*</Typography>*/}
                   <Button variant="outlined" sx={{ mt: 2 }}>
                     Edit Profile
                   </Button>
                 </Paper>
               </Grid>
-              <Grid item xs={12} md={8}>
+              <Grid item>
                 <Paper style={{ padding: "16px" }}>
                   <Typography variant="h6" gutterBottom>
                     Associated Companies
                   </Typography>
                   <TextField
-                    label="New Company ID"
+                    label="Company Name"
                     variant="outlined"
                     fullWidth
-                    value={newCompany}
-                    onChange={(e) => setNewCompany(e.target.value)}
+                    value={newCompanyName}
+                    onChange={(e) => setNewCompanyName(e.target.value)}
                     sx={{ marginBottom: 2 }}
                   />
+                  <TextField
+                    label="Company ID"
+                    variant="outlined"
+                    fullWidth
+                    value={newCompanyId}
+                    onChange={(e) => setNewCompanyId(e.target.value)}
+                    sx={{ marginBottom: 2 }}
+                  />
+                  <Typography
+                    variant="body2"
+                    gutterBottom
+                    sx={{ marginBottom: 2 }}
+                  >
+                    *Ask the admin for these details.
+                  </Typography>
                   <Button
                     variant="contained"
                     color="primary"
-                    onClick={handleNewCompanySubmit}
+                    onClick={() =>
+                      connectCompanyToUser({
+                        companyName: newCompanyName,
+                        companyId: newCompanyId,
+                        dispatch,
+                      })
+                    }
                     sx={{ marginBottom: 2 }}
                   >
                     Add Company
                   </Button>
                   <List>
                     {associatedCompanies.map((company: ICompany) => (
-                      <ListItem key={company.id}>
+                      <ListItem key={company.id} >
                         <ListItemText primary={company.name} />
                         <ListItemSecondaryAction>
                           <IconButton
@@ -154,7 +175,7 @@ const ProfilePage: React.FC<any> = ({
           </Paper>
         </Grid>
         {hasAssociatedCompanies && (
-          <Grid item xs={12} md={8}>
+          <Grid item>
             <Paper
               style={{
                 padding: "16px",
@@ -166,7 +187,7 @@ const ProfilePage: React.FC<any> = ({
               </Typography>
               {/* Company Cards */}
               {associatedCompanies.map((company: ICompany) => (
-                <Card key={company.id} sx={{ marginBottom: 2, px: 4, py: 2 }}>
+                <Card key={company.id} sx={{ marginBottom: 2, px: 4, py: 2 }} style={{backgroundColor: company.published ? "inherit" : "red"}}>
                   <CardContent>
                     <Typography variant="h4">{company.name}</Typography>
                     <div style={{ display: "flex" }}>
@@ -219,6 +240,7 @@ const ProfilePage: React.FC<any> = ({
                         {company.clientPublicId}{" "}
                       </a>
                     </Typography>
+                    <Typography variant="h5">{company.published ? "Published" : "Not Published"}</Typography>
                   </CardContent>
                   <CardActions
                     sx={{ justifyContent: "right", marginTop: "-50px" }}

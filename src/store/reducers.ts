@@ -14,13 +14,12 @@ import {
   SET_USER_LOGGED_IN,
   SET_USER_LOGGED_OUT,
   SET_ACTIVE_COMPANY_ID,
-  SET_CMS,
   INITIALIZE_ACTIVE_COMPANY_ID,
   SET_TOAST_MESSAGES,
-  SET_THEME,
   SET_PRODUCTS,
   SET_PAGE_TITLE,
   SET_ALL_ORDERS,
+  SET_CMS_AND_THEME,
 } from "./constants";
 
 const InitialUserState: UserState = {
@@ -30,7 +29,7 @@ const InitialUserState: UserState = {
 };
 export const userReducer = (
   state: UserState = InitialUserState,
-  action: any
+  action: any,
 ): UserState => {
   switch (action.type) {
     case INITIALIZE_ACTIVE_COMPANY_ID:
@@ -63,7 +62,7 @@ export const userReducer = (
 
 export const associatedCompanyReducer = (
   state: AssociatedCompanies = [],
-  action: any
+  action: any,
 ): AssociatedCompanies => {
   switch (action.type) {
     case SET_ASSOCIATED_COMPANIES:
@@ -75,7 +74,7 @@ export const associatedCompanyReducer = (
 
 export const companyReducer = (
   state: CompanyState = {},
-  action: any
+  action: any,
 ): CompanyState => {
   switch (action.type) {
     case SET_COMPANY_DETAILS:
@@ -86,12 +85,10 @@ export const companyReducer = (
 };
 
 const InitialWebsiteSettingsState: WebsiteSettingsState = {
-  cms: [],
-  possibleCmsComponents: [
-    "CUSTOMER_DETAILS",
-    "PRODUCTS_STEP",
-    "TIMESLOTS_STEP",
-  ],
+  landingContent: [],
+  checkoutContent: [],
+  allowedLandingComponents: ["PRODUCTS_STEP", "TIMESLOTS_STEP"],
+  allowedCheckoutComponents: ["Contact_Details", "Shipping_address", "Review_your_order"],
   theme: {
     colors: {
       primaryLight: "",
@@ -111,28 +108,22 @@ const InitialWebsiteSettingsState: WebsiteSettingsState = {
 };
 export const websiteSettingsReducer = (
   state: WebsiteSettingsState = InitialWebsiteSettingsState,
-  action: any
+  action: any,
 ): WebsiteSettingsState => {
   switch (action.type) {
-    case SET_CMS: {
+    case SET_CMS_AND_THEME: {
       return {
         ...state,
-        cms: [...action.payload],
-      };
-    }
-    case SET_THEME: {
-      return {
-        ...state,
-        theme: {
-          colors: action.payload.colors,
-          logos: action.payload.logos,
-        },
+        landingContent: [...action.landingContent],
+        checkoutContent: [...action.checkoutContent],
+        theme: { ...action.theme },
       };
     }
     case SET_ACTIVE_COMPANY_ID: {
       return {
         ...state,
-        cms: [],
+        checkoutContent: [],
+        landingContent: [],
       };
     }
     default:
@@ -168,7 +159,7 @@ export const uiReducer = (state: IUIState = UIState, action: any): IUIState => {
 const ProductState: IProductState = [];
 export const productReducer = (
   state: IProductState = ProductState,
-  action: any
+  action: any,
 ): IProductState => {
   switch (action.type) {
     case SET_PRODUCTS: {
@@ -182,7 +173,7 @@ export const productReducer = (
 const OrdersState: IOrdersState = [];
 export const ordersReducer = (
   state: IOrdersState = OrdersState,
-  action: any
+  action: any,
 ): IOrdersState => {
   switch (action.type) {
     case SET_ALL_ORDERS: {

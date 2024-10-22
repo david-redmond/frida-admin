@@ -1,17 +1,16 @@
-// reducers
-import { IStepsTypes } from "../../../src/modules/cms/interface";
-import { IThemeColors, IThemeLogo } from "../../../src/modules/theme/interface";
-
-export interface IProduct {
-  available: boolean;
-  clientId: string;
+export interface INewProduct {
+  title: string;
   description: string;
+  price: number;
+  duration: string | null;
+  available: boolean;
+}
+export interface IProduct extends INewProduct {
+  clientId: string;
   duration: string | null;
   image: string;
-  price: number;
   productId: string;
   quantity?: number;
-  title: string;
 }
 export interface UserState {
   isLoggedIn: boolean;
@@ -24,10 +23,9 @@ export interface IUser {
   firstname: string;
   surname: string;
   email: string;
-  position: string;
-  image: string;
+  image?: string;
   attributes: {
-    associatedClients: string[]
+    associatedClients?: string[];
   };
 }
 
@@ -35,6 +33,8 @@ export type AssociatedCompanies = Array<ICompany>;
 
 export interface INewCompany {
   name: string;
+  published: boolean;
+  promoted: boolean;
   address: {
     addressLine1: string;
     addressLine2: string;
@@ -57,14 +57,37 @@ export type IUserPositionType = "owner" | "admin" | "standard";
 export interface ICompany extends INewCompany {
   id: string;
   clientPublicId: string;
+  published: boolean;
 }
 
 export interface CompanyState {
   // Define the type for company state
 }
+
+export type ILandingStepsTypes = "PRODUCTS_STEP" | "TIMESLOTS_STEP";
+
+export type ICheckoutStepsTypes = "Contact_Details" | "Shipping_address" | "Review_your_order"; // | "Payment_details";
+
+export interface IThemeColors {
+  primaryLight: string;
+  primary: string;
+  primaryDark: string;
+  secondaryLight: string;
+  secondary: string;
+  secondaryDark: string;
+  secondaryText: string;
+  primaryText: string;
+}
+
+export interface IThemeLogo {
+  alt: string;
+  src: string;
+}
 export interface WebsiteSettingsState {
-  cms: IStepsTypes[];
-  possibleCmsComponents: IStepsTypes[];
+  landingContent: ILandingStepsTypes[];
+  allowedLandingComponents: ILandingStepsTypes[];
+  checkoutContent: ICheckoutStepsTypes[];
+  allowedCheckoutComponents: ICheckoutStepsTypes[];
   theme: {
     colors: IThemeColors;
     logos: IThemeLogo;

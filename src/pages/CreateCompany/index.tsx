@@ -5,8 +5,9 @@ import Typography from "@mui/material/Typography";
 import Box from "@mui/material/Box";
 import ExistingCompany from "./ExistingCompany";
 import CreateNewCompany from "./CreateNewCompany";
-import {IUser, RootState} from "../../store/interfaces";
-import {useSelector} from "react-redux";
+import { IUser, RootState } from "../../store/interfaces";
+import { useSelector } from "react-redux";
+import {Helmet} from "react-helmet";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -42,7 +43,7 @@ function a11yProps(index: number) {
 }
 
 export default function BasicTabs() {
-  const [value, setValue] = React.useState(0);
+  const [value, setValue] = React.useState(1);
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     setValue(newValue);
@@ -52,6 +53,10 @@ export default function BasicTabs() {
 
   return (
     <Box sx={{ width: "100%" }}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{`Project Frida Admin | Create Company`}</title>
+      </Helmet>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
         <Tabs
           value={value}
@@ -59,8 +64,12 @@ export default function BasicTabs() {
           aria-label="basic tabs example"
           centered
         >
-          <Tab label="Create a new company profile" {...a11yProps(0)} autoFocus />
-          <Tab label="Connect to an existing company" {...a11yProps(1)} />
+          <Tab label="Create a new company profile" {...a11yProps(0)} />
+          <Tab
+            label="Connect to an existing company"
+            {...a11yProps(1)}
+            autoFocus
+          />
         </Tabs>
       </Box>
       <CustomTabPanel value={value} index={0}>

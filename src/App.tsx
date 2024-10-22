@@ -5,7 +5,6 @@ import AppRoutes from "./routes";
 import HomePage from "./pages/homePage";
 import ServicesPage from "./pages/productsAndServices";
 import OrdersPage from "./pages/orders";
-import { Helmet } from "react-helmet";
 import Login from "./pages/Auth";
 import Register from "./pages/Auth/register";
 import UseToken from "./hooks/useToken";
@@ -20,9 +19,9 @@ import {
 import WebsiteSettings from "./pages/websiteSettings";
 import PageWrapper from "./components/PageWrapper";
 import Profile from "./pages/profile";
-import { CircularProgress } from "@mui/material";
 import { IUser } from "./store/interfaces";
 import { AxiosResponse } from "axios";
+import Spinner from "./components/Spinner";
 
 let isFetching: boolean = false;
 
@@ -39,10 +38,6 @@ function App() {
   if (!token) {
     return (
       <div style={{ position: "relative" }}>
-        <Helmet>
-          <meta charSet="utf-8" />
-          <title>{`Project Frida | Admin Panel`}</title>
-        </Helmet>
         <Routes>
           <Route
             path={AppRoutes.register}
@@ -64,7 +59,8 @@ function App() {
       // @ts-ignore
       dispatch(setUserDetails(response.data));
       dispatch(setUserLoggedIn());
-      const { associatedClients } = response.data.attributes;
+      const { attributes = {} } = response.data;
+      const associatedClients = attributes?.associatedClients || [];
       const allClients: any[] = [];
 
       const activeCompanyId = associatedClients[0];
@@ -85,13 +81,7 @@ function App() {
   };
 
   if (!hasUser) {
-    return (
-      <PageWrapper>
-        <div style={{ display: "flex", height: "60vh" }}>
-          <CircularProgress sx={{ margin: "auto" }} />
-        </div>
-      </PageWrapper>
-    );
+    return <Spinner />;
   }
   return (
     <PageWrapper>

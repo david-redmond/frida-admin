@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import {
@@ -19,7 +19,6 @@ import { toggleToastMessage } from "../../store/actions";
 import { IToggleToastMessage } from "../../store/interfaces";
 import CmsComponentItem from "./CmsComponentItem";
 
-
 interface IState {
   components: string[];
   newComponent: string;
@@ -29,13 +28,25 @@ interface IState {
 
 const ComponentOrdering: React.FC<IProps> = (props) => {
   const [state, setState] = useState<IState>({
-    components: [...props.cmsContent],
+    components: props.cmsContent,
     newComponent: "",
     availableComponents: props.possibleCmsComponents.filter(
-      (component) => !props.cmsContent.includes(component)
+      (component) => !props.cmsContent.includes(component),
     ),
     isSaving: false,
   });
+
+  useEffect(
+    () =>
+      setState({
+        ...state,
+        components: props.cmsContent,
+        availableComponents: props.possibleCmsComponents.filter(
+          (component) => !props.cmsContent.includes(component),
+        ),
+      }),
+    [props.cmsContent],
+  );
 
   const moveComponent = (fromIndex: number, toIndex: number) => {
     const updatedComponents = [...state.components];
@@ -61,7 +72,7 @@ const ComponentOrdering: React.FC<IProps> = (props) => {
         ...prevState,
         components: [...components, newComponent],
         availableComponents: availableComponents.filter(
-          (component) => component !== newComponent
+          (component) => component !== newComponent,
         ),
         newComponent: "",
       }));
@@ -73,14 +84,21 @@ const ComponentOrdering: React.FC<IProps> = (props) => {
       return;
     }
 
-    const data = {
-      cmsContent: state.components,
-    };
+    let data: any = {};
+
+    if (props.type === "landingPage") {
+      data.landingContent = state.components;
+    } else if (props.type === "checkout") {
+      data.checkoutContent = state.components;
+    }
 
     setState((prevState) => ({ ...prevState, isSaving: true }));
 
     try {
-      const response = await http.post(`/api/cms/${props.activeCompanyId}`, data);
+      const response = await http.put(
+        `/api/cms/${props.activeCompanyId}`,
+        data,
+      );
 
       if (response.status >= 200 && response.status <= 299) {
         props.toggleToastMessage({
@@ -105,6 +123,9 @@ const ComponentOrdering: React.FC<IProps> = (props) => {
         <Grid container spacing={2}>
           <Grid item xs={12} md={8}>
             {state.components.map((_component, index) => {
+              if (!CMS_SECTIONS[_component]) {
+                return <p>{_component}</p>;
+              }
               const { id, name, description } = CMS_SECTIONS[_component];
               return (
                 <CmsComponentItem
@@ -134,11 +155,17 @@ const ComponentOrdering: React.FC<IProps> = (props) => {
                   }
                 >
                   <MenuItem value="">Select a component</MenuItem>
-                  {state.availableComponents.map((component) => (
-                    <MenuItem key={component} value={component}>
-                      {CMS_SECTIONS[component]?.name}
-                    </MenuItem>
-                  ))}
+                  {state.availableComponents.map((component) => {
+                    if (!CMS_SECTIONS[component].name) {
+                      return <p>Unknown component</p>;
+                    } else {
+                      return (
+                        <MenuItem key={component} value={component}>
+                          {CMS_SECTIONS[component]?.name}
+                        </MenuItem>
+                      );
+                    }
+                  })}
                 </Select>
               </FormControl>
               <Button
@@ -149,30 +176,34 @@ const ComponentOrdering: React.FC<IProps> = (props) => {
                 Add to website
               </Button>
             </Paper>
-            <Button
-              variant="contained"
-              onClick={saveToDatabase}
-              style={{
-                right: 30,
-                bottom: 20,
-                position: "absolute",
-                width: "270px",
-              }}
-            >
-              Save changes
-            </Button>
           </Grid>
         </Grid>
+        <Button
+          variant="contained"
+          onClick={saveToDatabase}
+          style={{
+            marginTop: "20px",
+          }}
+        >
+          Save changes
+        </Button>
       </Container>
     </DndProvider>
   );
 };
 
-const mapState = (state: RootState): IMapsState => {
-  return {
-    cmsContent: state.websiteSettings.cms,
-    possibleCmsComponents: state.websiteSettings.possibleCmsComponents,
-  };
+const mapState = (state: RootState, ownProps: OwnProps): IMapsState => {
+  if (ownProps.type === "landingPage") {
+    return {
+      cmsContent: state.websiteSettings.landingContent,
+      possibleCmsComponents: state.websiteSettings.allowedLandingComponents,
+    };
+  } else {
+    return {
+      cmsContent: state.websiteSettings.checkoutContent,
+      possibleCmsComponents: state.websiteSettings.allowedCheckoutComponents,
+    };
+  }
 };
 
 export default connect(mapState, { toggleToastMessage })(ComponentOrdering);
@@ -186,6 +217,9 @@ interface IActions {
   toggleToastMessage: (payload: IToggleToastMessage) => void;
 }
 
-interface IProps extends IMapsState, IActions {
+interface IProps extends IMapsState, IActions, OwnProps {}
+
+interface OwnProps {
   activeCompanyId: string;
+  type: "landingPage" | "checkout";
 }

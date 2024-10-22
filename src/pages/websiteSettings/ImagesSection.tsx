@@ -15,8 +15,9 @@ import { toggleToastMessage } from "../../store/actions";
 import http from "../../http";
 
 const ImageManagement = (props: IProps) => {
-  const [logoUrl, setLogoUrl] = useState("");
-  const [logoAlt, setLogoAlt] = useState("");
+  console.log(props)
+  const [logoUrl, setLogoUrl] = useState(props.logos.src);
+  const [logoAlt, setLogoAlt] = useState(props.logos.alt);
 
   // const [faviconUrl, setFaviconUrl] = useState(props.logos.src);
   // const [faviconAlt, setFaviconAlt] = useState(props.logos.alt);

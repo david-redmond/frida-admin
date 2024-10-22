@@ -7,6 +7,8 @@ import { IOrdersState, RootState } from "../../store/interfaces";
 import Orders from "../../components/Orders";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
+import Spinner from "../../components/Spinner";
+import {Helmet} from "react-helmet";
 
 interface IProps extends IMapState {}
 
@@ -35,10 +37,32 @@ const OrdersPage = (props: IProps) => {
     fetchOrders();
   }, [props.activeCompanyId]);
 
+  if (isLoading) {
+    return <Spinner />;
+  }
+
+  if (props.orders.length === 0) {
+    return (
+      <Grid item xs={12}>
+        <Helmet>
+          <meta charSet="utf-8" />
+          <title>{`Project Frida Admin | No Orders`}</title>
+        </Helmet>
+        <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
+          <h3>No orders yet.</h3>
+        </Paper>
+      </Grid>
+    );
+  }
+
   return (
     <Grid item xs={12}>
+      <Helmet>
+        <meta charSet="utf-8" />
+        <title>{`Project Frida Admin | Orders`}</title>
+      </Helmet>
       <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-        <Orders rows={props.orders} title={"New Orders"}/>
+        <Orders rows={props.orders} title={"New Orders"} />
       </Paper>
     </Grid>
   );

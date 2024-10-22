@@ -1,58 +1,69 @@
-import React from "react";
-import http from "../../http";
+import React, { useState } from "react";
 import { RootState } from "../../store/interfaces";
 import { connect, useDispatch } from "react-redux";
 import CmsSection from "./CmsSection";
-import { setCMS, setPageTitle, setThemeData } from "../../store/actions";
+import { setPageTitle, setWebsiteSettings } from "../../store/actions";
 import Accordian from "../../components/Accordian";
 import ImagesSection from "./ImagesSection";
 import ThemeSection from "./ThemeSection";
+import Spinner from "../../components/Spinner";
+import fetchWebsiteSettings from "../../api/fetchWebsiteSettings";
+import {Helmet} from "react-helmet";
 
-interface WebsiteSettingsProps extends IMapState {}
+interface WebsiteSettingsProps extends IMapState, IActions {}
 
 interface IMapState {
   activeCompanyId: string;
-  hasCmsContent: boolean;
+}
+interface IActions {
+  setWebsiteSettings: any;
 }
 
 const WebsiteSettings = ({
   activeCompanyId,
-  hasCmsContent,
+  setWebsiteSettings,
 }: WebsiteSettingsProps) => {
   const dispatch = useDispatch();
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   React.useEffect(() => {
     dispatch(setPageTitle("Website Setting & Configuration"));
   });
   const fetchData = async () => {
-    const response = await http.get(`/api/cms/${activeCompanyId}`);
-    if (!!response && !!response.data) {
-      dispatch(setCMS(response.data.cmsContent));
-    }
-    const themeResponse = await http.get(`/api/theme/${activeCompanyId}`);
-    if (!!themeResponse && !!themeResponse.data) {
-      dispatch(setThemeData(themeResponse.data));
-    }
+    await fetchWebsiteSettings(activeCompanyId, dispatch);
+    setIsLoading(false);
   };
 
   React.useEffect(() => {
     fetchData();
   }, [activeCompanyId]);
 
-  if (!hasCmsContent) {
-    return <>Loading...</>;
+  if (isLoading) {
+    return <Spinner />;
   }
 
   return (
     <>
+        <Helmet>
+            <meta charSet="utf-8" />
+            <title>{`Project Frida Admin | Website Settings`}</title>
+        </Helmet>
       <Accordian
-        title={"Content Management"}
+        title={"Landing Page Content"}
         desciption={
           "Set the order, add and remove sections from the website according to your business modal."
         }
         defaultExpanded
       >
-        <CmsSection activeCompanyId={activeCompanyId} />
+        <CmsSection activeCompanyId={activeCompanyId} type={"landingPage"} />
+      </Accordian>
+      <Accordian
+        title={"Checkout Page Content"}
+        desciption={
+          "Set the order, add and remove sections from your checkout."
+        }
+      >
+        <CmsSection activeCompanyId={activeCompanyId} type={"checkout"} />
       </Accordian>
       <Accordian title={"Image Management"}>
         <ImagesSection activeCompanyId={activeCompanyId} />
@@ -66,6 +77,5 @@ const WebsiteSettings = ({
 
 const mapState = (state: RootState): IMapState => ({
   activeCompanyId: state.user.activeCompanyId,
-  hasCmsContent: state.websiteSettings.cms.length > 0,
 });
-export default connect(mapState)(WebsiteSettings);
+export default connect(mapState, { setWebsiteSettings })(WebsiteSettings);

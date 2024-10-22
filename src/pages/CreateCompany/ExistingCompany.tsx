@@ -16,7 +16,7 @@ function ExistingCompany() {
           Connect to an existing company
         </Typography>
         <TextField
-          label="Company Name*"
+          label="Company Name"
           variant="outlined"
           fullWidth
           value={newCompanyName}
@@ -24,7 +24,7 @@ function ExistingCompany() {
           sx={{ marginBottom: 2 }}
         />
         <TextField
-          label="Company ID*"
+          label="Company ID"
           variant="outlined"
           fullWidth
           value={newCompanyId}
