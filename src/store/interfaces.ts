@@ -12,6 +12,13 @@ export interface IProduct extends INewProduct {
   productId: string;
   quantity?: number;
 }
+
+export interface IService {
+  additionalOptions: any[];
+  attributes: {[key: string]: any};
+  serviceId: string;
+  zipCode: string;
+}
 export interface UserState {
   isLoggedIn: boolean;
   activeCompanyId: string;
@@ -103,8 +110,11 @@ export type IProductState = IProduct[];
 
 export interface IBasket {
   total: number;
-  items: IProduct[];
+  items: IBasketItem[];
+  services: IBasketItem[];
 }
+
+export type IBasketItem = IProduct | IService;
 export interface ICustomer {
   firstname: string;
   surname: string;

@@ -63,8 +63,8 @@ const OrdersPage = (props: IProps) => {
         <title>{`Project Frida Admin | Orders`}</title>
       </Helmet>
       <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-        <Orders rows={props.new} title={"New Orders"} />
-        <Orders rows={props.complete} title={"Completed Orders"} />
+        <Orders rows={props.new} title={"New Orders"} activeCompanyId={props.activeCompanyId} />
+        <Orders rows={props.complete} title={"Completed Orders"} activeCompanyId={props.activeCompanyId}  />
       </Paper>
     </Grid>
   );
