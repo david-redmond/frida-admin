@@ -17,7 +17,7 @@ import {Helmet} from "react-helmet";
 
 async function registerNewUser(credentials: any) {
   try {
-    const response = await httpAuth.post("/register", credentials);
+    const response = await httpAuth.post("/auth/register", credentials);
     return response;
   } catch (error: any) {
     if (error.response && error.response.status === 400) {
@@ -29,7 +29,7 @@ async function registerNewUser(credentials: any) {
 }
 
 async function loginUser(credentials: any) {
-  const response = await httpAuth.post("/login", credentials);
+  const response = await httpAuth.post("/auth/login", credentials);
   window.location.href = Routes.home;
   return response.data;
 }

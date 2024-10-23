@@ -24,7 +24,7 @@ interface ICredentials {
 
 async function loginUser(credentials: ICredentials) {
   try {
-    const response = await httpAuth.post("/login", credentials);
+    const response = await httpAuth.post("/auth/login", credentials);
     return response.data;
   } catch (error: any) {
     if (error.response && error.response.status === 400) {
