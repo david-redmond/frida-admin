@@ -170,14 +170,17 @@ export const productReducer = (
   }
 };
 
-const OrdersState: IOrdersState = [];
+const OrdersState: IOrdersState = {
+  new: [],
+  complete: []
+};
 export const ordersReducer = (
   state: IOrdersState = OrdersState,
   action: any,
 ): IOrdersState => {
   switch (action.type) {
     case SET_ALL_ORDERS: {
-      return [...action.payload];
+      return action.payload;
     }
     default:
       return state;

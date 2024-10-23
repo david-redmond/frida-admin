@@ -12,7 +12,7 @@ import {
   SET_USER_LOGGED_IN,
   SET_USER_LOGGED_OUT
 } from "./constants";
-import {IOrder, IProduct, IToggleToastMessage} from "./interfaces";
+import {IOrder, IOrdersState, IProduct, IToggleToastMessage} from "./interfaces";
 
 export const setUserDetails = (user: any) => {
   return {
@@ -83,7 +83,15 @@ export const setProducts = (payload: IProduct[]) => {
     payload,
   };
 };
-export const setOrders = (payload: IOrder[]) => {
+export const setOrders = (data: IOrder[]) => {
+  const payload: IOrdersState  = { new: [], complete: [] };
+  data.map(order => {
+    if (order.status === 'placed') {
+      payload.new.push(order);
+    } else {
+      payload.complete.push(order);
+    }
+  })
   return {
     type: SET_ALL_ORDERS,
     payload,

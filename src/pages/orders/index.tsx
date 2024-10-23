@@ -3,18 +3,19 @@ import { connect, useDispatch } from "react-redux";
 import { setOrders, setPageTitle } from "../../store/actions";
 import http from "../../http";
 import { useState } from "react";
-import { IOrdersState, RootState } from "../../store/interfaces";
+import { IOrder, RootState } from "../../store/interfaces";
 import Orders from "../../components/Orders";
 import Paper from "@mui/material/Paper";
 import Grid from "@mui/material/Grid";
 import Spinner from "../../components/Spinner";
-import {Helmet} from "react-helmet";
+import { Helmet } from "react-helmet";
 
 interface IProps extends IMapState {}
 
 interface IMapState {
   activeCompanyId: string;
-  orders: IOrdersState;
+  new: IOrder[];
+  complete: IOrder[];
 }
 const OrdersPage = (props: IProps) => {
   const [isLoading, setIsLoading] = useState<boolean>(true);
@@ -41,7 +42,7 @@ const OrdersPage = (props: IProps) => {
     return <Spinner />;
   }
 
-  if (props.orders.length === 0) {
+  if (props.new.length === 0 && props.complete.length === 0) {
     return (
       <Grid item xs={12}>
         <Helmet>
@@ -62,7 +63,8 @@ const OrdersPage = (props: IProps) => {
         <title>{`Project Frida Admin | Orders`}</title>
       </Helmet>
       <Paper sx={{ p: 2, display: "flex", flexDirection: "column" }}>
-        <Orders rows={props.orders} title={"New Orders"} />
+        <Orders rows={props.new} title={"New Orders"} />
+        <Orders rows={props.complete} title={"Completed Orders"} />
       </Paper>
     </Grid>
   );
@@ -70,6 +72,7 @@ const OrdersPage = (props: IProps) => {
 
 const mapState = (state: RootState): IMapState => ({
   activeCompanyId: state.user.activeCompanyId,
-  orders: state.orders,
+  new: state.orders.new,
+  complete: state.orders.complete,
 });
 export default connect(mapState)(OrdersPage);

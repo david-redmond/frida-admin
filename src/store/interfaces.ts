@@ -124,6 +124,8 @@ export interface IAddress {
 }
 export interface IOrder {
   orderRef: number;
+  orderType: "services" | "products";
+  status: string;
   timestamp: string;
   _id: string;
   clientId: string;
@@ -131,7 +133,10 @@ export interface IOrder {
   basket: IBasket;
   shippingAddress?: IAddress;
 }
-export type IOrdersState = IOrder[];
+export type IOrdersState = {
+  new: IOrder[];
+  complete: IOrder[];
+};
 
 export interface RootState {
   associatedCompanies: AssociatedCompanies;
